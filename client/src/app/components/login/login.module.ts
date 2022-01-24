@@ -22,6 +22,7 @@ import {LoginComponent} from './login.component';
 
 // IMPORTING THE ANGULAR FORM TO CONVERT AN HTML FORM TO A REACTIVE FORM.
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+// import { MatInputModule } from '@angular/material/input';
 
 // IMPORT KENDO MODULES FOR ANGULAR INTERFACE WIDGETS.
 
@@ -35,7 +36,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     CommonModule, 
     LoginRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    // MatInputModule
   ],
   declarations:
   [

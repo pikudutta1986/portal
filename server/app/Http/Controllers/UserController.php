@@ -31,7 +31,7 @@ class UserController extends Controller
                     'message' => 'The provided credentials are incorrect.',
                 ];
         
-                return response($response, 401);
+                return response($response, 200);
             }
         
             $token = $user->createToken('myToken')->plainTextToken;
@@ -44,6 +44,12 @@ class UserController extends Controller
     
             return response($response, 201);
         }
+
+        // return $response = [
+        //             'user' => $request->all(),
+        //             'message' => 'logged in',
+        //             'token' => 'token'
+        //         ];
 
     }
 
