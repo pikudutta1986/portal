@@ -6,14 +6,14 @@
         </div>
         <div class="card">
             <div class="body">
-                <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+                <form [formGroup]="formData" (ngSubmit)="login()" id="loginForm">
                     <div class="msg">Sign in to start your session</div>
                     <div class="input-group">
                         <span class="input-group-addon">
                             <i class="material-icons">person</i>
                         </span>
                         <div class="form-line">
-                            <input type="text" formControlName="username" class="form-control" placeholder="Username" required autofocus>
+                            <input type="text" formControlName="username" class="form-control" placeholder="Email / Mobile" required autofocus>
                         </div>
                     </div>
                     <div class="input-group">
@@ -35,10 +35,76 @@
                     </div>
                     <div class="row m-t-15 m-b--20">
                         <div class="col-xs-6">
-                            <a href="#">Register Now!</a>
+                            <a (click)="registerView()" class="btnss">Register Now!</a>
                         </div>
                         <div class="col-xs-6 align-right">
-                            <a href="/forgotpassword">Forgot Password?</a>
+                            <a href="/forgotpassword" class="btnss">Forgot Password?</a>
+                        </div>
+                    </div>
+                </form>
+
+                <form [formGroup]="regFormData" (ngSubmit)="register()" id="regForm">
+                    <div class="msg">Sign up to start your session</div>
+                    
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">person</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="text" formControlName="firstname" class="form-control" placeholder="First Name" required autofocus>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">person</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="text" formControlName="lastname" class="form-control" placeholder="Last Name" required autofocus>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">email</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="text" formControlName="email" class="form-control" placeholder="Email" required autofocus>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">phone</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="text" formControlName="phone" class="form-control" placeholder="Phone Number" required autofocus>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="password" class="form-control" formControlName="password" placeholder="Password" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-8 p-t-5">                           
+                        </div>
+                        <div class="col-xs-4">
+                            <button class="btn btn-block bg-pink waves-effect" type="submit">REGISTER</button>
+                        </div>
+                    </div>
+                 
+                    <div class="row m-t-15 m-b--20">
+                        <div class="col-xs-6">
+                            <a (click)="loginView()" class="btnss">Login</a>
+                        </div>
+                        <div class="col-xs-6 align-right">
+                            <a href="/forgotpassword" class="btnss">Forgot Password?</a>
                         </div>
                     </div>
                 </form>

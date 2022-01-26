@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +9,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 export class AuthService {
 
   apiBase = 'http://localhost:8000/api/server/login';
+  handleError:any;
 
   constructor(private http: HttpClient) {   }
   // CALL THIS FUNCTION WITH USERNAME AND PASSWORD TO MAKE LOGIN.
@@ -17,7 +20,7 @@ export class AuthService {
       'Content-Type': 'application/json',
     })
 
-    return this.http.post(this.apiBase,filterObject,{ headers: headers });
+    return this.http.post<any>(this.apiBase,filterObject,{ headers: headers });
   }
 
   isLoggedIn() {
@@ -26,4 +29,6 @@ export class AuthService {
     }
     return false;
   }
+
+    
 }

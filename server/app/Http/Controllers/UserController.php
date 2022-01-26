@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use DB;
 
 class UserController extends Controller
 {
@@ -23,33 +24,34 @@ class UserController extends Controller
 
         if($validated) {
             
-            $user = User::where('email', $request->email)->first();
+            // $user = User::where('email', $request->email)->first();
+
+            $user = User::select('*')
+                        ->where('email', '=', $request->email)
+                        ->orWhere('phone', $request->email)
+                        ->first();
            
             if (! $user || ! Hash::check($request->password, $user->password)) {
                
                 $response = [
                     'message' => 'The provided credentials are incorrect.',
+                    'status' => false,
                 ];
         
                 return response($response, 200);
             }
-        
-            $token = $user->createToken('myToken')->plainTextToken;
+            
+            $token = $user->createToken($user->email)->plainTextToken;
 
             $response = [
-                'user' => $user,
+                'user' => $user->email,
                 'message' => 'logged in',
-                'token' => $token
+                'token' => $token,
+                'status' => true,
             ];
     
             return response($response, 201);
-        }
-
-        // return $response = [
-        //             'user' => $request->all(),
-        //             'message' => 'logged in',
-        //             'token' => 'token'
-        //         ];
+        }        
 
     }
 
@@ -63,23 +65,43 @@ class UserController extends Controller
             'password' => 'required',
         ]);
 
-        $user = User::create([
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password)
-        ]);
+        $user = DB::table('users')
+                        ->where('email', '=', $request->email)
+                        ->orWhere('phone', $request->phone)
+                        ->first();
 
-        $token = $user->createToken('myToken')->plainTextToken;
+        // $user = User::where('email', $request->email)->first();
 
-        $response = [
-            'user' => $user,
-            'message' => 'Successfully Registered',
-            'token' => $token
-        ];
+        if(empty($user)) {
 
-        return response($response, 201);
+            $user = User::create([
+                'firstname' => $request->firstname,
+                'lastname' => $request->lastname,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => Hash::make($request->password)
+            ]);
+
+            $response = [
+                        'user' => $user,
+                        'message' => 'Successfully Registered',
+                        'token' => null,
+                        'status' => true,
+                    ];
+            
+            return response($response, 200);
+
+        } else {
+
+            $response = [                
+                'message' => 'Data already Registered',
+                'token' => null,
+                'status' => false,
+            ];
+    
+            return response($response, 200);
+
+        }        
 
     }
 

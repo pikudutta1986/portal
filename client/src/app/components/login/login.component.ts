@@ -9,7 +9,9 @@ import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms"
 // IMPORTING THE ANGULAR MODULES FOR DOING OPERATIONS ON URL.
 import { Router } from "@angular/router";
 import { AuthService } from '../../auth/auth.service';
+import { HelperService } from '../../services/helper.service';
 
+declare var $: any;
 
 // COMPONENT DECLARATION. HERE WE CAN DEFINE HTML TEMPLATE, CSS FILES AND COMPONENT OPTIONS.
 @Component({
@@ -23,31 +25,116 @@ import { AuthService } from '../../auth/auth.service';
 // DECLARING THE LoginComponent CLASS WITH EXPORT SO THAT WE CAN IMPORT THIS SERVICE INTO ANY OTHER COMPONENT OR SERVICE.
 export class LoginComponent implements OnInit {
 
-	public formData: FormGroup;
+	formData: FormGroup;
+	regFormData: FormGroup;
+	
   
-	constructor(private formBuilder: FormBuilder,private authService: AuthService,) {}
+	constructor(
+		private formBuilder: FormBuilder,private authService: AuthService,
+		private router: Router,private helperService: HelperService,
+	) {}
 
-  ngOnInit() {
-	this.formData = this.formBuilder.group ({      
-		username: '',
-		password: ''    
-    });
-  }
+	ngOnInit() {
+		this.formData = this.formBuilder.group ({      
+			username: '',
+			password: ''    
+		}); 
 
-  onSubmit() {
+		this.regFormData = this.formBuilder.group ({      
+			firstname: '',
+			lastname: '',
+			email: '',
+			phone: '',
+			password: ''
+		});
 
-	  let username = this.formData.value.username;
-	  let passwords = this.formData.value.password;
+		if(this.getAccessToken()) {
 
-	  let filterparam: any = {email: username, password: passwords}; 
+			this.router.navigate(['/dashboard']);
 
-	//   this.authService.doLogin(username, password);
-	//   console.log(username, password);
+		} 
 
-	  this.authService.doLogin(filterparam).subscribe(
-		  res => console.log(res),
-		  err => console.log(err),
-	  );
+		$("#regForm").hide();
+	}
 
-  }
+	registerView() {
+		$("#regForm").show();
+		$("#loginForm").hide();
+	}
+
+	loginView() {
+
+		$("#regForm").hide();
+		$("#loginForm").show();
+
+	}
+
+	login() {
+
+		let username = this.formData.value.username;
+		let passwords = this.formData.value.password;
+
+		let filterparam: any = { email: username, password: passwords };
+
+		this.authService.doLogin(filterparam).subscribe((result) => {
+
+			if(result.status) {
+				console.log(result);
+				this.setAccessToken(result);
+				this.router.navigate(['/dashboard']);				
+
+			} else {
+				alert('wrong credential');
+				console.log('false');
+			}
+
+		});
+
+	}
+
+	register() {
+
+		let firstname = this.regFormData.value.firstname;
+		let lastname = this.regFormData.value.lastname;
+		let email = this.regFormData.value.email;		
+		let phone = this.regFormData.value.phone;
+		let passwords = this.regFormData.value.password;
+
+		let filterparam: any = { 
+			firstname: firstname, lastname: lastname,
+			email: email, phone: phone,
+			password: passwords,
+		};
+
+		let api = 'register';
+
+		this.helperService.performPostRequestWithoutToken(api,filterparam).subscribe((res:any) => {
+
+			if(res.status) {
+				console.log('status',res.status);
+				this.regFormData.reset();
+				this.formData.reset();
+				this.loginView();
+			} else {
+				alert('Kindly check your email-id or Phone');
+			} 
+			// console.log(res);
+
+		});
+
+	}
+
+	setAccessToken(result:any) {
+		return new Promise(resolve => {
+		  sessionStorage.setItem('userData', result.user);
+		  sessionStorage.setItem('access_token', result.token);
+		  resolve(true);
+		});
+	}
+	
+	getAccessToken() {
+		return sessionStorage.getItem('access_token');
+	}
+
+	
 }
