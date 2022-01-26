@@ -16,9 +16,10 @@ import {FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
 
 // IMPORTING THE ANGULAR MODULES FOR DOING OPERATIONS ON URL.
 import {Router} from "@angular/router";
+import { HelperService } from '../../services/helper.service';
 
 
-
+declare var $: any;
 // COMPONENT DECLARATION. HERE WE CAN DEFINE HTML TEMPLATE, CSS FILES AND COMPONENT OPTIONS.
 @Component
 ({
@@ -33,20 +34,48 @@ export class ForgotpasswordComponent implements OnInit
 
   // CLASS CONSTRUCTOR, THIS WILL BE FIRST FUNCTION TO BE EXECUTED WHEN THIS CLASS LOADS.
   // HERE WE WILL TELL ANGULAR TO INJECT A DEPENDENCY BY SPECIFYING A CONSTRUCTOR PARAMETER WITH THE DEPENDENCY TYPE.
-  constructor
-  (
+  formData: FormGroup;
+
+  constructor  (
     private formBuilder: FormBuilder,
-    private router: Router,
-    
-  ) 
-  { 
-  }
+    private router: Router,private helperService: HelperService    
+  )   {   }
   
   // THIS ANGULAR INBUILT FUNCTION WILL BE CALLED AFTER THIS COMPONENT IS INITIALIZED,
   // TO HANDLE ANY ADDITIONAL INITIALIZATION TASKS
-  ngOnInit()
-  {
+  ngOnInit()  {
+
+    this.formData = this.formBuilder.group ({      
+			email: '',
+		}); 
+
+    $('.msg').css('color', '');
+    $('.msg').text('Enter your email address that you used to register. We will send you an email with your username and a link to reset your password.');
     
+    
+  }
+
+  resetPassword() {
+
+    let api = 'resetPassword';
+
+    let email = this.formData.value.email;
+		let filterparam: any = { email: email };
+
+    this.helperService.performPostRequestWithoutToken(api,filterparam).subscribe((res:any) => {
+
+			if(res.status) {
+
+        $('.msg').css('color', 'green');
+        $('.msg').text('Please check your email !!'); 
+				
+			} else {
+        
+        $('.msg').css('color', 'red');
+        $('.msg').text('Kindly provide correct email address');        
+
+			} 
+		});
   }
 
   

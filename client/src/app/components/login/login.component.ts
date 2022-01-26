@@ -53,16 +53,23 @@ export class LoginComponent implements OnInit {
 			this.router.navigate(['/dashboard']);
 
 		} 
+		$(".msg").text("Sign in to start your session");
 
 		$("#regForm").hide();
 	}
 
 	registerView() {
+
+		$('.msg').css('color', '');
+		$('.msg').text('Sign up to start your session');
 		$("#regForm").show();
 		$("#loginForm").hide();
 	}
 
 	loginView() {
+
+		$('.msg').css('color', '');
+		$('.msg').text('Sign in to start your session');
 
 		$("#regForm").hide();
 		$("#loginForm").show();
@@ -70,6 +77,8 @@ export class LoginComponent implements OnInit {
 	}
 
 	login() {
+
+		$('.msg').css('color', '');
 
 		let username = this.formData.value.username;
 		let passwords = this.formData.value.password;
@@ -84,7 +93,9 @@ export class LoginComponent implements OnInit {
 				this.router.navigate(['/dashboard']);				
 
 			} else {
-				alert('wrong credential');
+				$('.msg').text('Wrong credentials');
+				//remove text color from a div
+				$('.msg').css('color', 'red');
 				console.log('false');
 			}
 
@@ -94,6 +105,8 @@ export class LoginComponent implements OnInit {
 
 	register() {
 
+		$('.msg').css('color', '');
+		
 		let firstname = this.regFormData.value.firstname;
 		let lastname = this.regFormData.value.lastname;
 		let email = this.regFormData.value.email;		
@@ -116,7 +129,9 @@ export class LoginComponent implements OnInit {
 				this.formData.reset();
 				this.loginView();
 			} else {
-				alert('Kindly check your email-id or Phone');
+
+				$('.msg').text('Kindly check your email-id or Phone');
+				$('.msg').css('color', 'red');
 			} 
 			// console.log(res);
 

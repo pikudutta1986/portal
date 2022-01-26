@@ -20,6 +20,7 @@ Route::prefix('server')->group(function () {
     
     Route::post('/register', [UserController::class, 'register']);
     Route::post('/login', [UserController::class, 'login']);
+    Route::post('/resetPassword', [UserController::class, 'resetPassword']);
 
     Route::group(['middleware' => 'auth:sanctum'],function() {	
 
@@ -28,5 +29,5 @@ Route::prefix('server')->group(function () {
         // Route::get('/dashboard',[AdminController::class, 'dashboard'])->name('admin.dashboard');
     
     });
-
+    
 });

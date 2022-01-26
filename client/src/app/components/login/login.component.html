@@ -6,8 +6,9 @@
         </div>
         <div class="card">
             <div class="body">
+                <div class="msg"><span ></span></div>
                 <form [formGroup]="formData" (ngSubmit)="login()" id="loginForm">
-                    <div class="msg">Sign in to start your session</div>
+                    <!-- <div class="msg">Sign in to start your session</div> -->
                     <div class="input-group">
                         <span class="input-group-addon">
                             <i class="material-icons">person</i>
@@ -44,7 +45,7 @@
                 </form>
 
                 <form [formGroup]="regFormData" (ngSubmit)="register()" id="regForm">
-                    <div class="msg">Sign up to start your session</div>
+                    <!-- <div class="msg">Sign up to start your session</div> -->
                     
                     <div class="input-group">
                         <span class="input-group-addon">

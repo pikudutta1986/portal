@@ -109,4 +109,42 @@ class UserController extends Controller
         auth()->user()->tokens()->delete();
         return response()->json(['message' => 'Successfully logged out'],200);
     }
+
+    function resetPassword(Request $request) {
+
+        $validated = $request->validate([           
+            'email' => 'required',
+        ]);
+
+        if($validated) {
+
+            $user = User::where('email', $request->email)->first();
+            if (!$user) {
+               
+                $response = [
+                    'message' => 'The provided credentials are incorrect.',
+                    'status' => false,
+                ];
+        
+                return response($response, 200);
+            } else {
+                $to = $user->email;
+                $subject = "Password Reset Link";
+                $txt = "Hello world!";
+                $headers = "From: admin@portal.com" . "\r\n" .
+                "CC: demo@portal.com";
+
+                mail($to,$subject,$txt,$headers);
+                $response = [
+                    'message' => 'Email sent successfully.',
+                    'status' => true,
+                ];
+        
+                return response($response, 201);
+            }
+
+        }
+
+
+    }
 }
