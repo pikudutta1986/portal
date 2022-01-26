@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms"
 import { Router } from "@angular/router";
 import { AuthService } from '../../auth/auth.service';
 import { HelperService } from '../../services/helper.service';
+import { CookieService } from 'ngx-cookie-service';
 
 declare var $: any;
 
@@ -27,17 +28,19 @@ export class LoginComponent implements OnInit {
 
 	formData: FormGroup;
 	regFormData: FormGroup;
-	
+
+	cookieValue:any = null;	
   
 	constructor(
 		private formBuilder: FormBuilder,private authService: AuthService,
-		private router: Router,private helperService: HelperService,
+		private router: Router,private helperService: HelperService,private cookieService: CookieService
 	) {}
 
 	ngOnInit() {
 		this.formData = this.formBuilder.group ({      
 			username: '',
-			password: ''    
+			password: '',
+			rememberme: false,    
 		}); 
 
 		this.regFormData = this.formBuilder.group ({      
@@ -56,6 +59,24 @@ export class LoginComponent implements OnInit {
 		$(".msg").text("Sign in to start your session");
 
 		$("#regForm").hide();
+		
+
+	}
+
+	ngAfterViewInit() {
+
+		console.log(this.cookieService.get('username'));
+
+		if(this.cookieService.get('username') != '') {
+			console.log('yes');
+			this.formData = this.formBuilder.group ({      
+				username: this.cookieService.get('username'),
+				password: this.cookieService.get('password'),
+				rememberme: true,    
+			}); 
+		}
+
+
 	}
 
 	registerView() {
@@ -80,23 +101,35 @@ export class LoginComponent implements OnInit {
 
 		$('.msg').css('color', '');
 
+		// let a = this.formData.controls['username'].setValue('tushart');
+
 		let username = this.formData.value.username;
 		let passwords = this.formData.value.password;
+		let rememberme = this.formData.value.rememberme;
+
+		if(rememberme) {
+
+			this.cookieService.set('username', username);
+			this.cookieService.set('password', passwords);
+			// this.cookieValue = { 'email': this.cookieService.get('username'), password: this.cookieService.get('password')};
+
+		} else {
+			this.cookieService.deleteAll();
+		}
 
 		let filterparam: any = { email: username, password: passwords };
 
 		this.authService.doLogin(filterparam).subscribe((result) => {
 
 			if(result.status) {
-				console.log(result);
+				
 				this.setAccessToken(result);
 				this.router.navigate(['/dashboard']);				
 
 			} else {
+				
 				$('.msg').text('Wrong credentials');
-				//remove text color from a div
 				$('.msg').css('color', 'red');
-				console.log('false');
 			}
 
 		});

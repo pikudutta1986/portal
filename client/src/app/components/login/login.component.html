@@ -7,14 +7,16 @@
         <div class="card">
             <div class="body">
                 <div class="msg"><span ></span></div>
-                <form [formGroup]="formData" (ngSubmit)="login()" id="loginForm">
+                <form [formGroup]="formData"  id="loginForm">
+
+                    <!-- (ngSubmit)="login()" -->
                     <!-- <div class="msg">Sign in to start your session</div> -->
                     <div class="input-group">
                         <span class="input-group-addon">
                             <i class="material-icons">person</i>
                         </span>
                         <div class="form-line">
-                            <input type="text" formControlName="username" class="form-control" placeholder="Email / Mobile" required autofocus>
+                            <input type="text" matInput formControlName="username" class="form-control" placeholder="Email / Mobile" required autofocus>
                         </div>
                     </div>
                     <div class="input-group">
@@ -27,11 +29,11 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-8 p-t-5">
-                            <input type="checkbox" name="rememberme" id="rememberme" class="filled-in chk-col-pink">
+                            <input type="checkbox" formControlName="rememberme" id="rememberme" class="filled-in chk-col-pink">
                             <label for="rememberme">Remember Me</label>
                         </div>
                         <div class="col-xs-4">
-                            <button class="btn btn-block bg-pink waves-effect" type="submit">SIGN IN</button>
+                            <button class="btn btn-block bg-pink waves-effect" (click)="login()" >SIGN IN</button>
                         </div>
                     </div>
                     <div class="row m-t-15 m-b--20">

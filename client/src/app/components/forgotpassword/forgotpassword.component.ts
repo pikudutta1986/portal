@@ -38,8 +38,10 @@ export class ForgotpasswordComponent implements OnInit
 
   constructor  (
     private formBuilder: FormBuilder,
-    private router: Router,private helperService: HelperService    
+    private router: Router,private helperService: HelperService,      
   )   {   }
+
+  cookieValue:any;
   
   // THIS ANGULAR INBUILT FUNCTION WILL BE CALLED AFTER THIS COMPONENT IS INITIALIZED,
   // TO HANDLE ANY ADDITIONAL INITIALIZATION TASKS
@@ -51,7 +53,6 @@ export class ForgotpasswordComponent implements OnInit
 
     $('.msg').css('color', '');
     $('.msg').text('Enter your email address that you used to register. We will send you an email with your username and a link to reset your password.');
-    
     
   }
 

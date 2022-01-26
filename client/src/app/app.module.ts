@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
+import { CookieService } from 'ngx-cookie-service';
 // import { AuthService } from './auth/auth.service';
 
 @NgModule({
@@ -16,7 +17,7 @@ import { AppComponent } from './app.component';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [CookieService],
   // providers: [
   //   AuthService
   // ],
