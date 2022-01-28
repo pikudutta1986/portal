@@ -49,6 +49,40 @@ export class HelperService {
         { headers: headers }
       );
   }
+
+  sendChunk(endPoint: any, filterObject:any) {
+
+    let auth_token = sessionStorage.getItem('access_token');   
+
+    console.log(filterObject);
+
+    if (auth_token) {
+
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth_token}`
+      });   
+      
+      return this.http.post(this.apiBase + endPoint,filterObject,{ headers: headers });
+    }
+    else {
+      alert("Access token expired!");
+    }
+    
+  }
+
+  performGetRequest(endPoint:any) {
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    })
+
+    return this.http.get(
+      this.apiBase + endPoint,
+      { headers: headers }
+    );
+
+  }
     
  
 

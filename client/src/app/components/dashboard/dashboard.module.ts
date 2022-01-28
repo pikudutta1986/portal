@@ -40,10 +40,10 @@ import { SidebarComponent } from './sidebar/sidebar.component';
   imports:
   [
     CommonModule, 
-    dashboardRoutingModule,
-    HttpClientModule,
+    dashboardRoutingModule,    
     FormsModule, 
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule,
   ],
   declarations:
   [
@@ -51,7 +51,9 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     NavbarComponent,
     SidebarComponent
   ],
-  exports: [DashboradComponent],
+  exports: [
+    DashboradComponent,    
+  ],
   entryComponents: [],
   providers: [DatePipe]
 })
@@ -63,6 +65,6 @@ export class dashboardModule
   // HERE WE WILL TELL ANGULAR TO INJECT A DEPENDENCY BY SPECIFYING A CONSTRUCTOR PARAMETER WITH THE DEPENDENCY TYPE.
 	constructor()
 	{
-		console.log('dashboradModule Module loaded');
+		console.log('dashboradModule loaded');
 	}
 }

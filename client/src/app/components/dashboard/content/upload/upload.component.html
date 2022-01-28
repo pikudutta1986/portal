@@ -3,5 +3,17 @@
       <div class="jumbotron">
         Integrate Admin template in Angular
       </div>
+
+      <div class="row">
+        <div class="col-md-12">
+       
+            <form>               
+                    <input type="file" (change)="uploadFile($event)">             
+                    <input type="text" placeholder="Name" formControlName="username">            
+                    <button class="btn btn-danger btn-block btn-lg">Create</button>               
+            </form>
+      
+        </div>
+      </div>
     </div>
 </section>

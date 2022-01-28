@@ -29,21 +29,21 @@ export class LoginComponent implements OnInit {
 	formData: FormGroup;
 	regFormData: FormGroup;
 
-	cookieValue:any = null;	
-  
+	cookieValue: any = null;
+
 	constructor(
-		private formBuilder: FormBuilder,private authService: AuthService,
-		private router: Router,private helperService: HelperService,private cookieService: CookieService
-	) {}
+		private formBuilder: FormBuilder, private authService: AuthService,
+		private router: Router, private helperService: HelperService, private cookieService: CookieService
+	) { }
 
 	ngOnInit() {
-		this.formData = this.formBuilder.group ({      
+		this.formData = this.formBuilder.group({
 			username: '',
 			password: '',
-			rememberme: false,    
-		}); 
+			rememberme: false,
+		});
 
-		this.regFormData = this.formBuilder.group ({      
+		this.regFormData = this.formBuilder.group({
 			firstname: '',
 			lastname: '',
 			email: '',
@@ -51,15 +51,15 @@ export class LoginComponent implements OnInit {
 			password: ''
 		});
 
-		if(this.getAccessToken()) {
+		if (this.getAccessToken()) {
 
 			this.router.navigate(['/dashboard']);
 
-		} 
+		}
 		$(".msg").text("Sign in to start your session");
 
 		$("#regForm").hide();
-		
+
 
 	}
 
@@ -67,13 +67,13 @@ export class LoginComponent implements OnInit {
 
 		console.log(this.cookieService.get('username'));
 
-		if(this.cookieService.get('username') != '') {
+		if (this.cookieService.get('username') != '') {
 			console.log('yes');
-			this.formData = this.formBuilder.group ({      
+			this.formData = this.formBuilder.group({
 				username: this.cookieService.get('username'),
 				password: this.cookieService.get('password'),
-				rememberme: true,    
-			}); 
+				rememberme: true,
+			});
 		}
 
 
@@ -107,7 +107,7 @@ export class LoginComponent implements OnInit {
 		let passwords = this.formData.value.password;
 		let rememberme = this.formData.value.rememberme;
 
-		if(rememberme) {
+		if (rememberme) {
 
 			this.cookieService.set('username', username);
 			this.cookieService.set('password', passwords);
@@ -121,13 +121,13 @@ export class LoginComponent implements OnInit {
 
 		this.authService.doLogin(filterparam).subscribe((result) => {
 
-			if(result.status) {
-				
+			if (result.status) {
+
 				this.setAccessToken(result);
-				this.router.navigate(['/dashboard']);				
+				this.router.navigate(['/dashboard']);
 
 			} else {
-				
+
 				$('.msg').text('Wrong credentials');
 				$('.msg').css('color', 'red');
 			}
@@ -139,14 +139,14 @@ export class LoginComponent implements OnInit {
 	register() {
 
 		$('.msg').css('color', '');
-		
+
 		let firstname = this.regFormData.value.firstname;
 		let lastname = this.regFormData.value.lastname;
-		let email = this.regFormData.value.email;		
+		let email = this.regFormData.value.email;
 		let phone = this.regFormData.value.phone;
 		let passwords = this.regFormData.value.password;
 
-		let filterparam: any = { 
+		let filterparam: any = {
 			firstname: firstname, lastname: lastname,
 			email: email, phone: phone,
 			password: passwords,
@@ -154,10 +154,10 @@ export class LoginComponent implements OnInit {
 
 		let api = 'register';
 
-		this.helperService.performPostRequestWithoutToken(api,filterparam).subscribe((res:any) => {
+		this.helperService.performPostRequestWithoutToken(api, filterparam).subscribe((res: any) => {
 
-			if(res.status) {
-				console.log('status',res.status);
+			if (res.status) {
+				console.log('status', res.status);
 				this.regFormData.reset();
 				this.formData.reset();
 				this.loginView();
@@ -165,21 +165,21 @@ export class LoginComponent implements OnInit {
 
 				$('.msg').text('Kindly check your email-id or Phone');
 				$('.msg').css('color', 'red');
-			} 
+			}
 			// console.log(res);
 
 		});
 
 	}
 
-	setAccessToken(result:any) {
+	setAccessToken(result: any) {
 		return new Promise(resolve => {
-		  sessionStorage.setItem('userData', result.user);
-		  sessionStorage.setItem('access_token', result.token);
-		  resolve(true);
+			sessionStorage.setItem('userData', result.user);
+			sessionStorage.setItem('access_token', result.token);
+			resolve(true);
 		});
 	}
-	
+
 	getAccessToken() {
 		return sessionStorage.getItem('access_token');
 	}
