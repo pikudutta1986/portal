@@ -150,7 +150,42 @@ class UserController extends Controller
 
     function fileUpload(Request $request) {
 
-        return $res = $request->all();
+
+        echo "<pre>";
+       
+        $userId = $request->input('userId');      
+       
+        echo $userId;    
+        
+        echo "<br>";
+
+        if($request->hasFile('file')){
+        
+            foreach ($request->files as $file) {
+                
+                //get file name with extenstion
+               echo $fileNameWithExt = $file->getClientOriginalName();
+               echo"<br>";
+    
+                //get just filename
+                echo $fileName = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
+                echo"<br>";
+    
+                //get extension
+                echo $extension = $file->getClientOriginalExtension();
+                echo"<br>";
+    
+                //file to store
+                echo $fileNameToStore = $fileName.'_'.time().'.'.$extension;
+                echo"<br>";
+    
+                //upload to store
+                // $path = $file->storeAs('${your_storage_path}', $fileNameToStore);
+    
+                
+            }    
+            
+        }
 
         // $tmp_name = $_FILES['upload']['tmp_name'];
         // $filename = $_FILES['upload']['name'];
