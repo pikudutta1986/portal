@@ -27,7 +27,7 @@ export class UploadComponent implements OnInit {
   formData: FormGroup;
   selectedFile:File;
   filePath:any;
-  FOLDER = '';
+  FOLDER = '/images';
 
   constructor(private helperservice: HelperService,public fb: FormBuilder) { }
   
@@ -100,85 +100,89 @@ export class UploadComponent implements OnInit {
     // this.helperservice.sendChunk(api,fd)?.subscribe((res) => {
     //   console.log(res);
     // });
-    // this.uploadFile(this.selectedFile);
+    this.uploadFile(this.selectedFile);
     console.log(this.filePath);
   }
 
-  // uploadFiles(event:any) {
+  uploadFiles(event:any) {
 
-  //   let BYTES_PER_CHUNK = parseInt('2097152', 10);
-  //   let size = event.target.files[0].size;
-  //   let name = event.target.files[0].name;
-  //   let type = event.target.files[0].type;
-  //   let NUM_CHUNKS = Math.max(Math.ceil(size / BYTES_PER_CHUNK), 1);
+    let BYTES_PER_CHUNK = parseInt('2097152', 10);
+    let size = event.target.files[0].size;
+    let name = event.target.files[0].name;
+    let type = event.target.files[0].type;
+    let NUM_CHUNKS = Math.max(Math.ceil(size / BYTES_PER_CHUNK), 1);
 
-  //   let start = 0; 
-  //   let end = BYTES_PER_CHUNK; 
-  //   let num = 1;
+    let start = 0; 
+    let end = BYTES_PER_CHUNK; 
+    let num = 1;
 
-  //   console.log(size,name,type);
+    console.log(size,name,type);
 
-  //   let fd:any = new FormData();  
-  //   fd.append("num", num);
-  //   fd.append("num_chunks", NUM_CHUNKS); 
-  //   fd.append('file', event.target.files[0]);
+    let fd:any = new FormData();  
+    fd.append("num", num);
+    fd.append("num_chunks", NUM_CHUNKS); 
+    fd.append('file', event.target.files[0]);
 
-  //   let api = 'fileUpload';
+    let api = 'fileUpload';
     
-  //   let ts = JSON.stringify(Object.fromEntries(fd));
+    let ts = JSON.stringify(Object.fromEntries(fd));
     
-  //   this.helperservice.sendChunk(api,ts)?.subscribe((res) => {
-  //     console.log(res);
-  //   });
+    this.helperservice.sendChunk(api,ts)?.subscribe((res) => {
+      console.log(res);
+    });
   
-  //   // var chunkUpload = (blob:any) => {
+    // var chunkUpload = (blob:any) => {
       
       
-  //   // };
+    // };
   
-  //   // while (start < size) {
-  //   //   chunkUpload(file.target.files[0].slice(start, end));
-  //   //   start = end;
-  //   //   end = start + BYTES_PER_CHUNK;
-  //   //   num++;
-  //   // }
-  // }
+    // while (start < size) {
+    //   chunkUpload(file.target.files[0].slice(start, end));
+    //   start = end;
+    //   end = start + BYTES_PER_CHUNK;
+    //   num++;
+    // }
+  }
 
-  // uploadFile(file: any) {
-  //   const contentType = file.type;
-  //   const bucket = new S3(
-  //     {
-  //       accessKeyId: 'AKIA3A3Q7T2RPTYUED6V',
-  //       secretAccessKey: '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',
-  //       region: 'us-east-2'
-  //     }
-  //   );
-  //   const params = {
-  //     Bucket: 'anindyas3',
-  //     Key: this.FOLDER + file.name,
-  //     Body: file,
-  //     ACL: 'public-read',
-  //     ContentType: contentType
-  //   };
-  //   bucket.upload(params, function (err: any, data: any) {
-  //     if (err) {
-  //       console.log('There was an error uploading your file: ', err);
-  //       return false;
-  //     }
-  //     console.log('Successfully uploaded file.', data);
-  //     return true;
-  //   });
-  //   //for upload progress   
-  //   /*bucket.upload(params).on('httpUploadProgress', function (evt) {
-  //             console.log(evt.loaded + ' of ' + evt.total + ' Bytes');
-  //         }).send(function (err, data) {
-  //             if (err) {
-  //                 console.log('There was an error uploading your file: ', err);
-  //                 return false;
-  //             }
-  //             console.log('Successfully uploaded file.', data);
-  //             return true;
-  //         });*/
-  // }
+  uploadFile(file: any) {
+    const contentType = file.type;
+    
+    const bucket = new S3(
+      {
+        accessKeyId: 'AKIA3A3Q7T2RPTYUED6V',
+        secretAccessKey: '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',
+        region: 'us-east-2'
+      }
+    );
+    const params = {
+      Bucket: 'anindyas3',
+      Key: this.FOLDER + file.name,
+      Body: file,
+      ACL: 'public-read',
+      ContentType: contentType
+    };
+
+    console.log(contentType,params);
+    
+    bucket.upload(params, function (err: any, data: any) {
+      if (err) {
+        console.log('There was an error uploading your file: ', err);
+        return false;
+      }
+      console.log('Successfully uploaded file.', data);
+      return true;
+    });
+    //for upload progress   
+    /*bucket.upload(params).on('httpUploadProgress', function (evt) {
+              console.log(evt.loaded + ' of ' + evt.total + ' Bytes');
+          }).send(function (err, data) {
+              if (err) {
+                  console.log('There was an error uploading your file: ', err);
+                  return false;
+              }
+              console.log('Successfully uploaded file.', data);
+              return true;
+          });*/
+  }
 
 }
