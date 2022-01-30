@@ -151,7 +151,7 @@ export class UploadComponent implements OnInit {
       {
         accessKeyId: 'AKIA3A3Q7T2RPTYUED6V',
         secretAccessKey: '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',
-        region: 'us-east-2'
+        region: 'ap-south-1'
       }
     );
     const params = {
