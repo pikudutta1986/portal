@@ -41,7 +41,7 @@
                             <a (click)="registerView()" class="btnss">Register Now!</a>
                         </div>
                         <div class="col-xs-6 align-right">
-                            <a href="/forgotpassword" class="btnss">Forgot Password?</a>
+                            <a [routerLink]="['/forgotpassword']" class="btnss">Forgot Password?</a>
                         </div>
                     </div>
                 </form>
@@ -82,6 +82,20 @@
                         </span>
                         <div class="form-line">
                             <input type="text" formControlName="phone" class="form-control" placeholder="Phone Number" required autofocus>
+                            <input type="hidden" formControlName="userType" value="uploader">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">public</i>
+                        </span>
+                        <div class="form-line">
+                            <select formControlName="regions" class="form-control">
+                                <option *ngFor="let region of all_regions" value="{{region.id}}">
+                                    {{ region.name }}
+                                </option>
+                              </select>
                         </div>
                     </div>
 
@@ -107,7 +121,7 @@
                             <a (click)="loginView()" class="btnss">Login</a>
                         </div>
                         <div class="col-xs-6 align-right">
-                            <a href="/forgotpassword" class="btnss">Forgot Password?</a>
+                            <a [routerLink]="['/forgotpassword']" class="btnss">Forgot Password?</a>
                         </div>
                     </div>
                 </form>

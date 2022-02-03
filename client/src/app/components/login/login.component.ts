@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
 	regFormData: FormGroup;
 
 	cookieValue: any = null;
+	all_regions:any;
 
 	constructor(
 		private formBuilder: FormBuilder, private authService: AuthService,
@@ -43,11 +44,15 @@ export class LoginComponent implements OnInit {
 			rememberme: false,
 		});
 
+		this.regions();
+
 		this.regFormData = this.formBuilder.group({
 			firstname: '',
 			lastname: '',
 			email: '',
 			phone: '',
+			regions: '',
+			userType: 'uploader',
 			password: ''
 		});
 
@@ -144,15 +149,19 @@ export class LoginComponent implements OnInit {
 		let lastname = this.regFormData.value.lastname;
 		let email = this.regFormData.value.email;
 		let phone = this.regFormData.value.phone;
+		let regions = this.regFormData.value.regions;
+		let userType = this.regFormData.value.userType;
 		let passwords = this.regFormData.value.password;
 
 		let filterparam: any = {
 			firstname: firstname, lastname: lastname,
-			email: email, phone: phone,
+			email: email, phone: phone, regions: regions, userType: userType,
 			password: passwords,
 		};
 
 		let api = 'register';
+
+		console.log(filterparam);
 
 		this.helperService.performPostRequestWithoutToken(api, filterparam).subscribe((res: any) => {
 
@@ -182,6 +191,20 @@ export class LoginComponent implements OnInit {
 
 	getAccessToken() {
 		return sessionStorage.getItem('access_token');
+	}
+
+	regions() {
+
+		let api = 'regions';
+		this.helperService.performGetRequest(api).subscribe((res:any) => {
+			console.log(res);
+			if(res.status) {
+				this.all_regions = res.regions;
+				this.regFormData.controls['regions'].setValue(this.all_regions[0].id);
+
+			}
+		})
+
 	}
 
 	

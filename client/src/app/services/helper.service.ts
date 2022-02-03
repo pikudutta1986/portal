@@ -1,13 +1,15 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, CanActivateChild } from '@angular/router';
+import { environment } from './../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HelperService {
 
-  apiBase = 'http://localhost:8000/api/server/';
+  apiBase = 'http://localhost:8000/api/';
+  // apiBase = environment.apiBase;
 
   constructor(private http: HttpClient) { }  
 

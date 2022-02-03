@@ -62,6 +62,7 @@ class UserController extends Controller
             'lastname' => 'required',
             'email' => 'required',
             'phone' => 'required',
+            'regions' => 'required',
             'password' => 'required',
         ]);
 
@@ -79,6 +80,8 @@ class UserController extends Controller
                 'lastname' => $request->lastname,
                 'email' => $request->email,
                 'phone' => $request->phone,
+                'regions' => (int)$request->regions,
+                'userType' => $request->userType,
                 'password' => Hash::make($request->password)
             ]);
 

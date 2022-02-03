@@ -80,8 +80,12 @@ export class UploadComponent implements OnInit {
     bucket.upload(params, function (err: any, data: any) {
       if (err) {
         console.log('There was an error uploading your file: ', err);
+        $('.msg').css('color', 'red');
+        $('.msg').text('There was an error uploading your file to AWS S3');
         return false;
       }
+      $('.msg').css('color', 'green');
+      $('.msg').text('Successfully uploaded to AWS S3');
       console.log('Successfully uploaded file.', data);
       return true;
     });
