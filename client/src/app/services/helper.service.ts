@@ -8,8 +8,8 @@ import { environment } from './../../environments/environment.prod';
 })
 export class HelperService {
 
-  apiBase = 'http://localhost:8000/api/';
-  // apiBase = environment.apiBase;
+  // apiBase = 'http://localhost:8000/api/';
+  apiBase = environment.apiBase;
 
   constructor(private http: HttpClient) { }  
 
@@ -23,7 +23,8 @@ export class HelperService {
 
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${auth_token}`
+        // 'Authorization': `Bearer ${auth_token}`
+        'App-Token':  auth_token
       })
 
       return this.http.post(

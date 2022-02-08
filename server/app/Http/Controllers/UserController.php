@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use DB;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -40,13 +41,27 @@ class UserController extends Controller
         
                 return response($response, 200);
             }
+
+           
+            $token_data = DB::table('personal_access_tokens')->insertGetId([
+                'tokenable_type' => 'App\Models\User',
+                'tokenable_id' => $user->id,
+                'name' => $user->email,
+                'token' => Str::random(32),
+                'abilities' => '[*]',
+                'last_used_at' => null,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+
+            $token_details = DB::table('personal_access_tokens')->where('id',$token_data)->first();
             
-            $token = $user->createToken($user->email)->plainTextToken;
+            // $token = $user->createToken($user->email)->plainTextToken;
 
             $response = [
                 'user' => $user->email,
                 'message' => 'logged in',
-                'token' => $token,
+                'token' => $token_details->token,
                 'status' => true,
             ];
     
@@ -108,9 +123,17 @@ class UserController extends Controller
 
     }
 
-    function logout() {
-        auth()->user()->tokens()->delete();
-        return response()->json(['message' => 'Successfully logged out'],200);
+    function logout(Request $request) {
+
+        // $user = request()->user();
+        // auth()->user()->tokens()->delete();
+        // $request->user()->currentAccessToken()->delete();
+        // $accessToken = auth()->user()->token();
+        // $token= $request->user()->tokens->find($accessToken);
+        // $request->user()->currentAccessToken()->delete();
+        $token = $request->header('App-Token');
+        $res = DB::table('personal_access_tokens')->where('token', $token)->delete();
+        return response()->json(['message' => 'Successfully logged out','status' => $res],200);
     }
 
     function resetPassword(Request $request) {

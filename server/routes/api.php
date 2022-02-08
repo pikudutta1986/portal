@@ -22,22 +22,23 @@ use App\Http\Controllers\RegionController;
     Route::post('/register', [UserController::class, 'register']);
     Route::post('/login', [UserController::class, 'login']);
     Route::post('/resetPassword', [UserController::class, 'resetPassword']);
-    Route::get('/users', [UserController::class, 'index']);
     Route::get('/regions', [RegionController::class, 'index']);
     
 
-    Route::group(['middleware' => 'auth:sanctum'],function() {	
-
-        Route::get('/test', function () {
-		    return 'Hello World';
-		});
+    Route::group(['middleware' => 'AuthKey'],function() {	
+        
+        Route::get('/users', [UserController::class, 'index']);
 
         Route::post('/logout', [UserController::class, 'logout']);
         Route::post('/regionStore', [RegionController::class, 'store']);
         
         Route::post('/fileUpload', [UserController::class, 'fileUpload']);
-        // Route::get('/dashboard',[AdminController::class, 'dashboard'])->name('admin.dashboard');
     
     });
+    // Route::group(['middleware' => 'auth:sanctum'],function() {	
+       
+    //     Route::post('/logout', [UserController::class, 'logout']);
+    
+    // });
     
 // });
