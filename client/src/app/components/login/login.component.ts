@@ -183,7 +183,7 @@ export class LoginComponent implements OnInit {
 
 	setAccessToken(result: any) {
 		return new Promise(resolve => {
-			sessionStorage.setItem('userData', result.user);
+			sessionStorage.setItem('userData', result.id);
 			sessionStorage.setItem('access_token', result.token);
 			resolve(true);
 		});

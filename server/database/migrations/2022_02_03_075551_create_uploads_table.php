@@ -19,7 +19,11 @@ class CreateUploadsTable extends Migration
             $table->string('user_id');
             $table->string('description');
             $table->string('size');
-            $table->string('type');
+            $table->string('type')->nullable();
+            $table->string('bucket');
+            $table->string('key')->nullable();
+            $table->string('etag')->nullable();
+            $table->string('location');
             $table->timestamps();
         });
     }

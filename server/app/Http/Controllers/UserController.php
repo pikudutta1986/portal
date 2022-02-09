@@ -59,6 +59,7 @@ class UserController extends Controller
             // $token = $user->createToken($user->email)->plainTextToken;
 
             $response = [
+                'id' => $user->id,
                 'user' => $user->email,
                 'message' => 'logged in',
                 'token' => $token_details->token,
@@ -250,6 +251,74 @@ class UserController extends Controller
 
 
         // return response()->json(['message' => $res],200);
+
+    }
+
+    function getDownloderByRegion(Request $request) {
+
+        $validated = $request->validate([           
+            'id' => 'required',
+        ]);
+
+        if($validated) { 
+            
+            $user = User::where('id', $request->id)->first();
+
+            $data = DB::table('users')
+                                ->where('users.userType', '!=', $user->userType)
+                                ->join('regions', 'users.regions', '=', 'regions.id')
+                                ->where('users.regions', '=', $user->regions)
+                                ->select('users.*')
+                                ->get();
+            $response = [
+                'id' => $user->id,
+                'region' => (int)$user->regions,
+                'message' => $data,
+                'status' => true,
+            ];
+    
+            return response($response, 201);
+        }
+
+        
+
+    }
+
+    function uploadFilesToDb(Request $request) {
+
+        $validated = $request->validate([
+            'user_id' => 'required',
+            'name' => 'required',
+            'description' => 'required',
+            'size' => 'required',
+            // 'type' => 'required',
+            'bucket' => 'required',
+            // 'key' => 'required',
+            'location' => 'required',
+        ]);
+
+        $res = DB::table('uploads')->insertGetId([
+            'user_id' => (int)$request->user_id,
+            'name' => $request->name,
+            'description' => $request->description,
+            'size' => $request->size,
+            'type' => $request->type,
+            'bucket' => $request->bucket,
+            'key' => $request->key,
+            'etag' => 'null',
+            'location' => $request->location,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+
+        ]);
+
+        $response = [
+                    'message' => 'Successfully Stored',
+                    'id' => $res,
+                    'status' => true,
+                ];
+        
+        return response($response, 200);
 
     }
 }

@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 import { CookieService } from 'ngx-cookie-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { dashboardModule } from './components/dashboard/dashboard.module';
+
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    dashboardModule
   ],
   providers: [
     CookieService,

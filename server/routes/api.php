@@ -33,6 +33,9 @@ use App\Http\Controllers\RegionController;
         Route::post('/regionStore', [RegionController::class, 'store']);
         
         Route::post('/fileUpload', [UserController::class, 'fileUpload']);
+        Route::post('/getDownloderByRegion', [UserController::class, 'getDownloderByRegion']);        
+        Route::post('/uploadFilesToDb', [UserController::class, 'uploadFilesToDb']);
+        
     
     });
     // Route::group(['middleware' => 'auth:sanctum'],function() {	
