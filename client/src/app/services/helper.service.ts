@@ -8,8 +8,8 @@ import { environment } from './../../environments/environment.prod';
 })
 export class HelperService {
 
-  apiBase = 'http://localhost:8000/api/';
-  // apiBase = environment.apiBase;
+  // apiBase = 'http://localhost:8000/api/';
+  apiBase = environment.apiBase;
 
   constructor(private http: HttpClient) { }  
 
