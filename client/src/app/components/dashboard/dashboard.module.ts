@@ -13,6 +13,7 @@ import {HttpClientModule} from '@angular/common/http';
 
 // IMPORTING THE ANGULAR FORM TO CONVERT AN HTML FORM TO A REACTIVE FORM.
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 //IMPORTING DASHBOARD COMPONENT
@@ -36,6 +37,8 @@ import { UploadComponent } from './content/upload/upload.component';
   FormsModule, 
   ReactiveFormsModule,
   HttpClientModule,
+  MatCheckboxModule
+  
   ],
   declarations:
   [

@@ -10,6 +10,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { dashboardModule } from './components/dashboard/dashboard.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { dashboardModule } from './components/dashboard/dashboard.module';
   HttpClientModule,
   FormsModule,
   ReactiveFormsModule,
-  dashboardModule
+  dashboardModule,
+  BrowserAnimationsModule
   ],
   providers: [
   CookieService,
