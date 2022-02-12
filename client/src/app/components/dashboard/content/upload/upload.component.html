@@ -50,12 +50,9 @@
                       <label class="form-check-label" for="materialUnchecked">Material unchecked</label>
                     </div>
 
-                    
-                    <li *ngFor="let downloader of downloaderLists; index as i;">
-                      {{i}} 
-                    </li>
-                    
-
+        
+                    <div *ngFor="let downloader of downloaderList;">{{downloader.firstname}} </div>
+                 
                   </form>
                 </div>
               </div>

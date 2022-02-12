@@ -1,6 +1,7 @@
 // app.module.ts
 
 import { BrowserModule } from '@angular/platform-browser';
+import {CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -13,23 +14,21 @@ import { dashboardModule } from './components/dashboard/dashboard.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+  AppComponent
   ],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    dashboardModule
+  BrowserModule,
+  CommonModule,
+  AppRoutingModule,
+  HttpClientModule,
+  FormsModule,
+  ReactiveFormsModule,
+  dashboardModule
   ],
   providers: [
-    CookieService,
-    { provide: LocationStrategy, useClass: HashLocationStrategy },
+  CookieService,
+  { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
-  // providers: [
-  //   AuthService
-  // ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

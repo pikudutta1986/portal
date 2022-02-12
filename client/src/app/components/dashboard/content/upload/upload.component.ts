@@ -31,15 +31,15 @@ export class UploadComponent implements OnInit {
 
   downloaderLists = [
 
-    {
-      id:1,
-    },
-    {
-      id:1,
-    },
-    {
-      id:1,
-    }
+  {
+    id:1,
+  },
+  {
+    id:1,
+  },
+  {
+    id:1,
+  }
 
   ];
 
@@ -68,13 +68,13 @@ export class UploadComponent implements OnInit {
 
   ngAfterViewInit() {
 
-    console.log(this.userData);
+    console.log('userData', this.userData);
     this.getUsersByRegion(this.userData);
 
   }
   
   onFileSelected(event:any) {
-    
+
     this.filePath = event.target.value;
     this.selectedFile = event.target.files[0];
     
@@ -90,68 +90,68 @@ export class UploadComponent implements OnInit {
     // fd.append('file', this.selectedFile, this.selectedFile.name);
     // fd.append('userId', '2');
     // this.helperservice.sendChunk(api,fd)?.subscribe((res) => {
-    //   console.log(res);
-    // });
-    let name = $("#name").val();
-    if(name == '' ) {
-      alert('Please Provide Name');
-      return false;    
-    } 
-    if(this.selectedFile == undefined ) {
-      alert('Please Choose File');
-      return false;    
-    } 
-    if(this.selectedFile.name != '' && name != '') {
-      this.uploadFile(this.selectedFile);
+      //   console.log(res);
+      // });
+      let name = $("#name").val();
+      if(name == '' ) {
+        alert('Please Provide Name');
+        return false;    
+      } 
+      if(this.selectedFile == undefined ) {
+        alert('Please Choose File');
+        return false;    
+      } 
+      if(this.selectedFile.name != '' && name != '') {
+        this.uploadFile(this.selectedFile);
+      }
+
+      console.log(this.filePath);
     }
-    
-    console.log(this.filePath);
-  }
 
-  uploadFile(file: any) {
-    const contentType = file.type;
+    uploadFile(file: any) {
+      const contentType = file.type;
 
-    const bucket = new S3(
+      const bucket = new S3(
       {
         accessKeyId: 'AKIA3A3Q7T2RPTYUED6V',
         secretAccessKey: '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',
         region: 'ap-south-1'
       }
-    );
-    const params = {
-      Bucket: 'anindyas3',
-      Key: this.FOLDER + file.name,
-      Body: file,
-      ACL: 'public-read',
-      ContentType: contentType
-    };
+      );
+      const params = {
+        Bucket: 'anindyas3',
+        Key: this.FOLDER + file.name,
+        Body: file,
+        ACL: 'public-read',
+        ContentType: contentType
+      };
 
-    console.log(contentType, params);
+      console.log(contentType, params);
 
-    bucket.upload(params, (err: any, data: any) => {
-      if (err) {
-        console.log('There was an error uploading your file: ', err);
-        $('.msg').css('color', 'red');
-        $('.msg').text('There was an error uploading your file to AWS S3');
-        return false;
-      }
-      $('.msg').css('color', 'green');
-      $('.msg').text('Successfully uploaded to AWS S3');
-      console.log('Successfully uploaded file.', data);
-      this.bResponse.Bucket = data.Bucket;
-      this.bResponse.Etag = data.Etag;
-      this.bResponse.Key = data.Key;
-      this.bResponse.Location = data.Location;
-      this.saveBtnResponse = true;
+      bucket.upload(params, (err: any, data: any) => {
+        if (err) {
+          console.log('There was an error uploading your file: ', err);
+          $('.msg').css('color', 'red');
+          $('.msg').text('There was an error uploading your file to AWS S3');
+          return false;
+        }
+        $('.msg').css('color', 'green');
+        $('.msg').text('Successfully uploaded to AWS S3');
+        console.log('Successfully uploaded file.', data);
+        this.bResponse.Bucket = data.Bucket;
+        this.bResponse.Etag = data.Etag;
+        this.bResponse.Key = data.Key;
+        this.bResponse.Location = data.Location;
+        this.saveBtnResponse = true;
 
-      if (this.saveBtnResponse) {
-        $("#saveBtn").show();
-      } else {
-        $("#saveBtn").hide();
-      }
-      return true;
-    });
-    //for upload progress   
+        if (this.saveBtnResponse) {
+          $("#saveBtn").show();
+        } else {
+          $("#saveBtn").hide();
+        }
+        return true;
+      });
+      //for upload progress   
     /*bucket.upload(params).on('httpUploadProgress', function (evt) {
               console.log(evt.loaded + ' of ' + evt.total + ' Bytes');
           }).send(function (err, data) {
@@ -161,52 +161,52 @@ export class UploadComponent implements OnInit {
               }
               console.log('Successfully uploaded file.', data);
               return true;
-          });*/
+            });*/
 
 
-  }
+          }
 
-  getUsersByRegion(id:any) {
+          getUsersByRegion(id:any) {
 
-    let api = 'getDownloderByRegion';
-    let filterParam:any = { id: parseInt(id), };
-		this.helperservice.performPostRequest(api,filterParam)?.subscribe((res:any) => {
-      
-      if(res.status) {
-        this.downloaderList = res.message;
-        console.log(this.downloaderList);
-      }
-    });
-  }
+            let api = 'getDownloderByRegion';
+            let filterParam:any = { id: parseInt(id)};
+            this.helperservice.performPostRequest(api,filterParam)?.subscribe((res:any) => {
 
-  savePathToDb() {
+              if(res.status) {
+                this.downloaderList = res.message;
+                console.log(this.downloaderList);
+              }
+            });
+          }
 
-    let name = $("#name").val();
-    if(name != '') {
-      let api = 'uploadFilesToDb';
-      let filterParam: any = {
-        user_id: parseInt(this.userData),
-        name: name,
-        description: this.selectedFile.name,
-        size: this.selectedFile.size,
-        type: this.selectedFile.type,
-        bucket: this.bResponse.Bucket,
-        key: this.bResponse.key,
-        location: this.bResponse.Location,
-      };
-      console.log(filterParam);
-      this.helperservice.performPostRequest(api,filterParam)?.subscribe((res:any) => {
-        if(res.status) {
-          console.log(res);
-          $('.msg').css('color', 'green');
-          $('.msg').text('Successfully uploaded to Server');
+          savePathToDb() {
+
+            let name = $("#name").val();
+            if(name != '') {
+              let api = 'uploadFilesToDb';
+              let filterParam: any = {
+                user_id: parseInt(this.userData),
+                name: name,
+                description: this.selectedFile.name,
+                size: this.selectedFile.size,
+                type: this.selectedFile.type,
+                bucket: this.bResponse.Bucket,
+                key: this.bResponse.key,
+                location: this.bResponse.Location,
+              };
+              console.log(filterParam);
+              this.helperservice.performPostRequest(api,filterParam)?.subscribe((res:any) => {
+                if(res.status) {
+                  console.log(res);
+                  $('.msg').css('color', 'green');
+                  $('.msg').text('Successfully uploaded to Server');
+                }
+              });
+            } else {
+              alert('provide name');
+            }
+
+
+          }
+
         }
-      });
-    } else {
-      alert('provide name');
-    }
-    
-
-  }
- 
-}

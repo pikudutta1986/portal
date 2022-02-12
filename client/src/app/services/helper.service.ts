@@ -1,14 +1,13 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, CanActivateChild } from '@angular/router';
-import { environment } from './../../environments/environment.prod';
+import { environment } from './../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HelperService {
 
-  // apiBase = 'http://localhost:8000/api/';
   apiBase = environment.apiBase;
 
   constructor(private http: HttpClient) { }  
@@ -31,7 +30,7 @@ export class HelperService {
         this.apiBase + endPoint,
         filterObject,
         { headers: headers }
-      );
+        );
     }
     else {
       alert("Access token expired!");
@@ -40,16 +39,16 @@ export class HelperService {
 
   performPostRequestWithoutToken(endPoint: any, filterObject: any) {
     
-      console.log('filterObject', filterObject);
+    console.log('filterObject', filterObject);
 
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-      })
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    })
 
-      return this.http.post(
-        this.apiBase + endPoint,
-        filterObject,
-        { headers: headers }
+    return this.http.post(
+      this.apiBase + endPoint,
+      filterObject,
+      { headers: headers }
       );
   }
 
@@ -83,10 +82,10 @@ export class HelperService {
     return this.http.get(
       this.apiBase + endPoint,
       { headers: headers }
-    );
+      );
 
   }
-    
- 
+  
+  
 
 }
