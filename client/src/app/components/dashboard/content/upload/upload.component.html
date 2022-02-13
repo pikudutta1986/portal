@@ -49,7 +49,7 @@
 
                     <div >
                       <section formArrayName="downloaders" class="example-section" *ngFor="let downloader of ordersFormArray.controls;; let i = index">
-                        <mat-checkbox [formControlName]="i" class="example-margin" >{{downloaderList[i].email}}</mat-checkbox>
+                        <mat-checkbox [formControlName]="i" class="example-margin" [checked]="true" >{{downloaderList[i].email}}</mat-checkbox>
                       </section>  
                     </div>
                     <br/>

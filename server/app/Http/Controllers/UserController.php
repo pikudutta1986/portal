@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\upload;
+use App\Models\uploadAccess;
 use Illuminate\Support\Facades\Hash;
 use DB;
 use Illuminate\Support\Str;
@@ -60,6 +62,7 @@ class UserController extends Controller
 
             $response = [
                 'id' => $user->id,
+                'type' => $user->userType,
                 'user' => $user->email,
                 'message' => 'logged in',
                 'token' => $token_details->token,
@@ -321,4 +324,73 @@ class UserController extends Controller
         return response($response, 200);
 
     }
+
+    function transfer(Request $request) {
+
+        $validated = $request->validate([
+            'downloaderids' => 'required',
+            'uploaderId' => 'required',            
+        ]);
+
+        $uploadDetails = upload::where('user_id', (int)$request->uploaderId)->first();
+
+        if(!empty($uploadDetails->id)) {
+
+            foreach ($request->downloaderids as $downloaderId) {
+
+                $uploadAccessDetails = uploadAccess::where([
+                    'uploaderId' => (int)$request->uploaderId,
+                    'downloaderId' => (int)$downloaderId,
+                ])->first();
+
+                if(empty($uploadAccessDetails->id)) {
+
+                    $user = uploadAccess::create([
+                        'uploaderId' => (int)$request->uploaderId,
+                        'downloaderId' => (int)$downloaderId,
+                        'uploadId' => (int)$uploadDetails->id,
+                    ]);
+
+                }
+                
+            }
+
+            $uploadAccessDetails = uploadAccess::where('uploaderId', (int)$request->uploaderId)->get();
+    
+            $response = [
+                'message' => $uploadAccessDetails,
+                'status' => true,
+            ];
+    
+            return response($response, 200);
+            
+        }
+        
+    }
+
+    function getDownloadList(Request $request) {
+
+        $validated = $request->validate([           
+            'user_id' => 'required',
+        ]);
+
+        if($validated) { 
+            
+            $userAccessDetails = uploadAccess::where('downloaderId', $request->user_id)->first();
+            $downloadDetails = upload::where('id', $userAccessDetails->uploadId)->get();
+           
+            $response = [
+                'id' => $request->user_id,
+                'message' => $downloadDetails,
+                'status' => true,
+            ];
+    
+            return response($response, 201);
+        }
+
+        
+
+    }
+
+
 }

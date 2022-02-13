@@ -19,6 +19,7 @@ import {DashboradComponent} from './dashboard.component';
 
 // IMPORTING ALL PAGE COMPONENT 
 import {UploadComponent} from './content/upload/upload.component';
+import { DownloadComponent } from './content/download/download.component';
 
 // DEFINING THE ROUTINGS
 const routes: Routes = 
@@ -30,6 +31,7 @@ const routes: Routes =
     children: 
     [
       {path: 'upload', component: UploadComponent},
+      {path: 'download', component: DownloadComponent},
     ]
   }
 ];

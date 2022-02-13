@@ -30,7 +30,12 @@
                 <li class="header">MAIN NAVIGATION</li>
                 <li class="active">
 
-                    <a [routerLink]="['/dashboard/upload']">
+                    <a [routerLink]="['/dashboard/download']" *ngIf="!st">
+                        <span class="material-icons">file_download</span>
+                        <span>Download</span>
+                    </a>
+
+                    <a [routerLink]="['/dashboard/upload']" *ngIf="st">
                         <span class="material-icons">file_upload</span>
                         <span>Upload</span>
                     </a>

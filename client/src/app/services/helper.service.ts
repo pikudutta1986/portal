@@ -85,6 +85,38 @@ export class HelperService {
       );
 
   }
+
+  getCurrentPageData(allData:any, pageNumber:any, itemsPerPage:any) 
+  {
+    return new Promise(resolve => {
+
+      if (allData.length > 0)
+      {
+        let start = (pageNumber - 1) * itemsPerPage;
+        let end = start + itemsPerPage;
+        let returnData = [];
+        let totalItems = allData.length;
+
+        if (end > totalItems)
+        {
+          end = totalItems;
+        }
+
+        for (let index = start; index < end; index++) 
+        {
+          returnData.push(allData[index]);
+        }
+        if (returnData.length == (end - start)) {
+          resolve(returnData);
+        }
+      }
+      else
+      {
+        resolve([]);
+      }
+      
+    });
+  }
   
   
 

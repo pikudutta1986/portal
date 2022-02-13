@@ -14,7 +14,8 @@ import {HttpClientModule} from '@angular/common/http';
 // IMPORTING THE ANGULAR FORM TO CONVERT AN HTML FORM TO A REACTIVE FORM.
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-
+import {MatTableModule} from '@angular/material/table';
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 //IMPORTING DASHBOARD COMPONENT
 import { DashboradComponent } from './dashboard.component';
@@ -25,6 +26,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 
 // IMPORTING ALL PAGE COMPONENT 
 import { UploadComponent } from './content/upload/upload.component';
+import { DownloadComponent } from './content/download/download.component';
 
 
 // AN ANGULAR DECORATOR THAT IDENTIFIES THE MODULE'S OWN COMPONENTS, DIRECTIVES, AND PIPES, SO THAT EXTERNAL COMPONENTS CAN USE THEM.
@@ -37,15 +39,17 @@ import { UploadComponent } from './content/upload/upload.component';
   FormsModule, 
   ReactiveFormsModule,
   HttpClientModule,
-  MatCheckboxModule
-  
+  MatCheckboxModule,
+  MatTableModule,
+  MatPaginatorModule
   ],
   declarations:
   [
   DashboradComponent,
   NavbarComponent,
   SidebarComponent,
-  UploadComponent
+  UploadComponent,
+  DownloadComponent
   ],
   exports: [
   DashboradComponent,    

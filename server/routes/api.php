@@ -15,9 +15,6 @@ use App\Http\Controllers\RegionController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-
-// Route::prefix('server')->group(function () {
     
     Route::post('/register', [UserController::class, 'register']);
     Route::post('/login', [UserController::class, 'login']);
@@ -35,13 +32,8 @@ use App\Http\Controllers\RegionController;
         Route::post('/fileUpload', [UserController::class, 'fileUpload']);
         Route::post('/getDownloderByRegion', [UserController::class, 'getDownloderByRegion']);        
         Route::post('/uploadFilesToDb', [UserController::class, 'uploadFilesToDb']);
-        
+        Route::post('/transfer', [UserController::class, 'transfer']); 
+        Route::post('/getDownloadList', [UserController::class, 'getDownloadList']);        
     
     });
-    // Route::group(['middleware' => 'auth:sanctum'],function() {	
-       
-    //     Route::post('/logout', [UserController::class, 'logout']);
-    
-    // });
-    
-// });
+   

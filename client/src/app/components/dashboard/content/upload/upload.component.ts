@@ -28,6 +28,7 @@ export class UploadComponent implements OnInit {
   userData: any;
 
   downloaderList: any;
+  attachedFileIds: any;
 
 
   bResponse: any = {
@@ -38,6 +39,7 @@ export class UploadComponent implements OnInit {
   };
 
   saveBtnResponse: any;
+  chk: boolean = true;
 
   constructor(private helperservice: HelperService, public fb: FormBuilder) { }
 
@@ -59,8 +61,8 @@ export class UploadComponent implements OnInit {
     // this.addCheckboxesToForm();
   }
 
-  private addCheckboxesToForm() {
-    this.downloaderList.forEach(() => this.ordersFormArray.push(new FormControl(false)));
+  private addCheckboxesToForm(status: any) {
+    this.downloaderList.forEach(() => this.ordersFormArray.push(new FormControl(status)));
   }
 
   get ordersFormArray() {
@@ -168,7 +170,7 @@ export class UploadComponent implements OnInit {
 
       if (res.status) {
         this.downloaderList = res.message;
-        this.addCheckboxesToForm();       
+        this.addCheckboxesToForm(false);       
         console.log(this.downloaderList);
       }
     });
@@ -215,13 +217,31 @@ export class UploadComponent implements OnInit {
         downloaderids: downloader_id,
         uploaderId: parseInt(this.userData)
       };
-      console.log(filterParam);
+      let api = 'transfer';
+      this.helperservice.performPostRequest(api, filterParam)?.subscribe((res: any) => {
+        if (res.status) {
+         this.attachedFileIds = res.message;    
+         this.isEnabled();     
+        }
+      });
     } else {
       alert('choose at least one user');
     }
     
    
 
+  }
+
+  isEnabled() {
+    
+    var result = this.downloaderList.filter((o1: any) =>{
+      // filter out (!) items in result2
+      return !this.attachedFileIds.some((o2: any) =>{
+          return o1.id === o2.id;          // assumes unique id
+      });
+    });   
+    console.log(result);
+    
   }
 
 }
