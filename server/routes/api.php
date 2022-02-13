@@ -33,7 +33,8 @@ use App\Http\Controllers\RegionController;
         Route::post('/getDownloderByRegion', [UserController::class, 'getDownloderByRegion']);        
         Route::post('/uploadFilesToDb', [UserController::class, 'uploadFilesToDb']);
         Route::post('/transfer', [UserController::class, 'transfer']); 
-        Route::post('/getDownloadList', [UserController::class, 'getDownloadList']);        
+        Route::post('/getDownloadList', [UserController::class, 'getDownloadList']);   
+        Route::post('/getUploadList', [UserController::class, 'getUploadList']);     
     
     });
    

@@ -402,5 +402,45 @@ class UserController extends Controller
 
     }
 
+    function getUploadList(Request $request) {
+
+        $validated = $request->validate([           
+            'user_id' => 'required',
+        ]);
+
+        if($validated) { 
+
+            $uploadDetails = upload::where('user_id', $request->user_id)->first();
+
+            if(!empty($uploadDetails)) {
+
+                $data = DB::table('upload_accesses')
+                                    ->where('uploaderId', '=', $uploadDetails->user_id)
+                                    ->join('users', 'users.id', '=', 'upload_accesses.downloaderId') 
+                                    ->join('regions', 'users.regions', '=', 'regions.id')                               
+                                    ->select('users.*','regions.name')
+                                    ->get();
+                $response = [
+                    'message' => 'Successfully Retrieved',
+                    'res' => [$uploadDetails],
+                    'transferData' => $data,
+                    'status' => true,
+                ];
+
+            } else {
+                $response = [
+                    'message' => 'Successfully Retrieved',
+                    'res' => [],
+                    'status' => true,
+                ];
+
+            }
+    
+            return response($response, 200);
+
+        }
+
+    }
+
 
 }

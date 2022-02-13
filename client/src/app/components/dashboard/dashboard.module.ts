@@ -27,6 +27,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 // IMPORTING ALL PAGE COMPONENT 
 import { UploadComponent } from './content/upload/upload.component';
 import { DownloadComponent } from './content/download/download.component';
+import { UploadlistComponent } from './content/uploadlist/uploadlist.component';
 
 
 // AN ANGULAR DECORATOR THAT IDENTIFIES THE MODULE'S OWN COMPONENTS, DIRECTIVES, AND PIPES, SO THAT EXTERNAL COMPONENTS CAN USE THEM.
@@ -49,7 +50,8 @@ import { DownloadComponent } from './content/download/download.component';
   NavbarComponent,
   SidebarComponent,
   UploadComponent,
-  DownloadComponent
+  DownloadComponent,
+  UploadlistComponent
   ],
   exports: [
   DashboradComponent,    

@@ -39,6 +39,11 @@
                         <span class="material-icons">file_upload</span>
                         <span>Upload</span>
                     </a>
+
+                    <a [routerLink]="['/dashboard/uploadlist']" *ngIf="st">
+                        <span class="material-icons">file_upload</span>
+                        <span>Upload List</span>
+                    </a>
                 </li>
                 <!--<li>
                     <a href="javascript:void(0);" class="menu-toggle">
