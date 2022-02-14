@@ -6,15 +6,17 @@
 
           <div class="col-md-12">
             
-            <div class="col-md-6" >
+            <div class="col-md-12" >
               <div class="card">
-                <h5 class="card-header info-color white-text text-center py-4" style="padding-top: 5%;">
-                  <strong>Upload</strong>
-                </h5>
-                <div class="msg" style="text-align: center;"><span ></span></div>
+                
+                
                 <div class="card-body px-lg-5 pt-0" style="padding: 20px;">
                   <!-- Form -->
                   <form enctype="multipart/form-data" id="uploadForm" action="#">
+                    <h2 class="card-header info-color white-text text-center py-4 tBg">
+                      <strong>UPLOAD - {{ regionName }} </strong>
+                    </h2>
+                    <div class="msg" style="text-align: center;padding: 20px;"><span ></span></div>
                     <label for="materialLoginFormEmail">Package Name:</label>
                     <div class="md-form">
                       <input type="text" id="name" class="form-control" autocomplete="off" required>
@@ -27,25 +29,16 @@
 
                     <div class="pt">
                       <button type="button" class="btn btn-primary" (click)="onUpload()">Upload</button>
-                      <button type="button" id="saveBtn" style="float:right" (click)="savePathToDb()" class="btn btn-success">Save</button>
+                      <!-- <button type="button" id="saveBtn" style="float:right" (click)="savePathToDb()" class="btn btn-success">Save</button> -->
                     </div>
                   </form>
                   <!-- Form -->
-                </div>
-              </div>
-            </div>
-  
-            <div class="col-md-6">
-             
-              <div class="card">
-                <h5 class="card-header info-color white-text text-center py-4" style="padding-top: 5%;">
-                  <strong>List Of Users</strong>
-                </h5>
-               
-                <div class="card-body px-lg-5 pt-0" style="padding: 20px;">
-                  <form id="userForm" [formGroup]="formData" (ngSubmit)="submit()">
 
-                    <label for="materialLoginFormEmail">Select Users:</label>   
+                  <form id="userForm" [formGroup]="formData" (ngSubmit)="submit()" style="padding-top: 5%;">
+
+                    <h2 class="card-header info-color white-text text-center py-4 tBg" >
+                      <strong>Select the users you want to send</strong>
+                    </h2>  
 
                     <div >
                       <section formArrayName="downloaders" class="example-section" *ngFor="let downloader of ordersFormArray.controls;; let i = index">
@@ -58,6 +51,7 @@
                 </div>
               </div>
             </div>
+  
   
           </div>
           

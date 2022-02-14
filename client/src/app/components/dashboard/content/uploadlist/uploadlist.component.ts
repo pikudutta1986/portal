@@ -43,8 +43,7 @@ export class UploadlistComponent implements OnInit {
       this.helperservice.performPostRequest(api, filterParam)?.subscribe((response: any) => {
         if (response.status) {
           this.responseData = response.res;
-          this.totalItems = this.responseData.length;
-          this.trsansferList = response.transferData;          
+          this.totalItems = this.responseData.length;       
           this.helperservice.getCurrentPageData(this.responseData, this.dataPage + 1, this.itemsPerPage).then((returnData: any) => {
            
             this.dataSource = new MatTableDataSource( returnData );

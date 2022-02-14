@@ -271,7 +271,7 @@ class UserController extends Controller
                                 ->where('users.userType', '!=', $user->userType)
                                 ->join('regions', 'users.regions', '=', 'regions.id')
                                 ->where('users.regions', '=', $user->regions)
-                                ->select('users.*')
+                                ->select('users.*','regions.name')
                                 ->get();
             $response = [
                 'id' => $user->id,
@@ -410,20 +410,38 @@ class UserController extends Controller
 
         if($validated) { 
 
-            $uploadDetails = upload::where('user_id', $request->user_id)->first();
+            // $uploadDetails = upload::where('user_id', $request->user_id)->get();
 
-            if(!empty($uploadDetails)) {
+            $data = DB::table('uploads')
+                        ->where('user_id', '=', $request->user_id)                        
+                        ->get();
 
-                $data = DB::table('upload_accesses')
-                                    ->where('uploaderId', '=', $uploadDetails->user_id)
-                                    ->join('users', 'users.id', '=', 'upload_accesses.downloaderId') 
-                                    ->join('regions', 'users.regions', '=', 'regions.id')                               
-                                    ->select('users.*','regions.name')
+            if(!empty($data)) {
+               
+                $sdk = [];
+               
+                foreach($data as $res) {
+                   
+                  $p = DB::table('upload_accesses')
+                                    ->where('uploadId', '=', $res->id)
+                                    ->join('users', 'users.id', '=', 'upload_accesses.downloaderId')
+                                    // ->join('regions', 'users.regions', '=', 'regions.id')
+                                    ->select('users.email as user_email','upload_accesses.*')
                                     ->get();
+                  $s = [
+                    'description' => $res->description,
+                    'location' => $res->location,
+                    'name' => $res->name,
+                    'location' => $res->location,
+                    'size' => $res->size,
+                    'attachedUsers' => $p
+                  ];
+                  array_push($sdk,$s);
+                }
+               
                 $response = [
                     'message' => 'Successfully Retrieved',
-                    'res' => [$uploadDetails],
-                    'transferData' => $data,
+                    'res' => $sdk,
                     'status' => true,
                 ];
 

@@ -41,6 +41,8 @@ export class UploadComponent implements OnInit {
   saveBtnResponse: any;
   chk: boolean = true;
 
+  regionName:any = null;
+
   constructor(private helperservice: HelperService, public fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -124,29 +126,40 @@ export class UploadComponent implements OnInit {
 
     console.log(contentType, params);
 
-    bucket.upload(params, (err: any, data: any) => {
-      if (err) {
-        console.log('There was an error uploading your file: ', err);
-        $('.msg').css('color', 'red');
-        $('.msg').text('There was an error uploading your file to AWS S3');
-        return false;
-      }
-      $('.msg').css('color', 'green');
-      $('.msg').text('Successfully uploaded to AWS S3');
-      console.log('Successfully uploaded file.', data);
-      this.bResponse.Bucket = data.Bucket;
-      this.bResponse.Etag = data.Etag;
-      this.bResponse.Key = data.Key;
-      this.bResponse.Location = data.Location;
-      this.saveBtnResponse = true;
+    let name = $("#name").val();
+    if (name != '') {
 
-      if (this.saveBtnResponse) {
-        $("#saveBtn").show();
-      } else {
-        $("#saveBtn").hide();
-      }
-      return true;
-    });
+      bucket.upload(params, (err: any, data: any) => {
+        if (err) {
+          console.log('There was an error uploading your file: ', err);
+          $('.msg').css('color', 'red');
+          $('.msg').text('There was an error uploading your file to AWS S3');
+          return false;
+        }
+        $('.msg').css('color', 'green');
+        $('.msg').text('Successfully uploaded to AWS S3');
+        console.log('Successfully uploaded file.', data);
+        this.bResponse.Bucket = data.Bucket;
+        this.bResponse.Etag = data.Etag;
+        this.bResponse.Key = data.Key;
+        this.bResponse.Location = data.Location;
+        this.saveBtnResponse = true;
+  
+        this.savePathToDb();
+  
+        // if (this.saveBtnResponse) {
+        //   $("#saveBtn").show();
+        // } else {
+        //   $("#saveBtn").hide();
+        // }
+        return true;
+      });
+
+    } else {
+      alert('provide name');
+    }
+
+   
     //for upload progress   
     /*bucket.upload(params).on('httpUploadProgress', function (evt) {
               console.log(evt.loaded + ' of ' + evt.total + ' Bytes');
@@ -170,6 +183,7 @@ export class UploadComponent implements OnInit {
 
       if (res.status) {
         this.downloaderList = res.message;
+        this.regionName = res.message[0].name;
         this.addCheckboxesToForm(false);       
         console.log(this.downloaderList);
       }
@@ -195,12 +209,10 @@ export class UploadComponent implements OnInit {
       this.helperservice.performPostRequest(api, filterParam)?.subscribe((res: any) => {
         if (res.status) {
           console.log(res);
-          $('.msg').css('color', 'green');
-          $('.msg').text('Successfully uploaded to Server');
+          // $('.msg').css('color', 'green');
+          // $('.msg').text('Successfully uploaded to Server');
         }
       });
-    } else {
-      alert('provide name');
     }
 
 
