@@ -1,0 +1,7 @@
+.header{position: relative;}
+.logout{position: absolute !important;
+    right: 10px;
+    top: 0px;
+    display: inline !important;
+    padding: 0 !important;
+    width: auto !important; cursor: pointer;}

@@ -23,7 +23,7 @@ export class UploadlistComponent implements OnInit {
   trsansferList:any;
 
   public totalItems: number = 0;
-  public itemsPerPage: number = 10;
+  public itemsPerPage: number = 5;
   public dataPage: number = 0;
 
   constructor(private helperservice: HelperService, public fb: FormBuilder) { }

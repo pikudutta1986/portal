@@ -15,7 +15,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTableModule} from '@angular/material/table';
-import { MatPaginatorModule } from "@angular/material/paginator";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 //IMPORTING DASHBOARD COMPONENT
 import { DashboradComponent } from './dashboard.component';

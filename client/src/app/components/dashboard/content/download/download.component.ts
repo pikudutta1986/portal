@@ -25,7 +25,7 @@ export class DownloadComponent implements OnInit {
   responseData:any;
   dataSource: any;
   public totalItems: number = 0;
-  public itemsPerPage: number = 10;
+  public itemsPerPage: number = 5;
   public dataPage: number = 0;
 
   constructor(private helperservice: HelperService, public fb: FormBuilder) { }

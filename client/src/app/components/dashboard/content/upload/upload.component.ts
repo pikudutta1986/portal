@@ -26,7 +26,7 @@ export class UploadComponent implements OnInit {
   formData: FormGroup;
   selectedFile: File;
   filePath: any;
-  FOLDER = '/images';
+  FOLDER = '/images/';
   userData: any;
 
   downloaderList: any;
@@ -49,36 +49,55 @@ export class UploadComponent implements OnInit {
 
   constructor(private helperservice: HelperService, public fb: FormBuilder) { }
 
-  ngOnInit(): void {
-
+  ngOnInit(): void 
+  {
     this.formData = this.fb.group({
       downloaders: new FormArray([]),
     });
 
     this.userData = sessionStorage.getItem('userData');
     this.saveBtnResponse = false;
-    $("#saveBtn").hide();
+    //$("#saveBtn").hide();
     $("#userForm").hide();
     this.default();   
 
   }
 
   default() {
-    this.helperservice.showSiteLoader();
+    //this.helperservice.showSiteLoader();
     this.getUsersByRegion(this.userData);
   }
 
-  loader() {
-    if(this.usRegionStatus) {
+  loader() 
+  {
+    if(this.usRegionStatus) 
+    {
       this.helperservice.hideSiteLoader();
       this.usRegionStatus = false;
     }
-    
-
   }
 
   ngAfterViewInit() {    
-    
+
+  }
+
+  
+  getUsersByRegion(id: any) 
+  {
+
+    let api = 'getDownloderByRegion';
+    let filterParam: any = { id: parseInt(id) };
+    this.helperservice.performPostRequest(api, filterParam)?.subscribe((res: any) => {
+
+      if (res.status) {
+        this.downloaderList = res.message;
+        this.regionName = res.message[0].name;
+        this.addCheckboxesToForm(false);  
+        this.usRegionStatus = true;
+        this.loader();     
+        console.log(this.downloaderList);
+      }
+    });
   }
 
   private addCheckboxesToForm(status: any) {
@@ -112,16 +131,16 @@ export class UploadComponent implements OnInit {
 
   }
 
-  uploadFile(file: any) {
+  uploadFile(file: any) 
+  {
 
     const contentType = file.type;
-
     const bucket = new S3(
-      {
-        accessKeyId: 'AKIA3A3Q7T2RPTYUED6V',
-        secretAccessKey: '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',
-        region: 'ap-south-1'
-      }
+    {
+      accessKeyId: 'AKIA3A3Q7T2RPTYUED6V',
+      secretAccessKey: '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',
+      region: 'ap-south-1'
+    }
     );
     const params = {
       Bucket: 'anindyas3',
@@ -132,72 +151,46 @@ export class UploadComponent implements OnInit {
     };
 
     let name = $("#name").val();
-    if (name != '') {
+    if (name != '') 
+    {
 
       this.helperservice.showSiteLoader();
 
-      bucket.upload(params, (err: any, data: any) => {
+      bucket.upload(params, (err: any, data: any) => 
+      {
         if (err) {
           console.log('There was an error uploading your file: ', err);
           $('.msg').css('color', 'red');
           $('.msg').text('There was an error uploading your file to AWS S3');
           return false;
         }
-        $('.msg').css('color', 'green');
-        $('.msg').text('Successfully uploaded to AWS S3');
-        console.log('Successfully uploaded file.', data);
+        //$('.msg').css('color', 'green');
+        //$('.msg').text('Successfully uploaded to AWS S3');
+        
         this.bResponse.Bucket = data.Bucket;
         this.bResponse.Etag = data.Etag;
         this.bResponse.Key = data.Key;
         this.bResponse.Location = data.Location;
         this.saveBtnResponse = true;
-  
+
         this.savePathToDb();  
         
         return true;
       });
 
-    } else {
+    } 
+    else 
+    {
       alert('provide name');
     }
-
-   
-    //for upload progress   
-    /*bucket.upload(params).on('httpUploadProgress', function (evt) {
-              console.log(evt.loaded + ' of ' + evt.total + ' Bytes');
-          }).send(function (err, data) {
-              if (err) {
-                  console.log('There was an error uploading your file: ', err);
-                  return false;
-              }
-              console.log('Successfully uploaded file.', data);
-              return true;
-            });*/
-
-
   }
 
-  getUsersByRegion(id: any) {
-
-    let api = 'getDownloderByRegion';
-    let filterParam: any = { id: parseInt(id) };
-    this.helperservice.performPostRequest(api, filterParam)?.subscribe((res: any) => {
-
-      if (res.status) {
-        this.downloaderList = res.message;
-        this.regionName = res.message[0].name;
-        this.addCheckboxesToForm(false);  
-        this.usRegionStatus = true;
-        this.loader();     
-        console.log(this.downloaderList);
-      }
-    });
-  }
 
   savePathToDb() {
 
     let name = $("#name").val();
-    if (name != '') {
+    if (name != '') 
+    {
       let api = 'uploadFilesToDb';
       let filterParam: any = {
         user_id: parseInt(this.userData),
@@ -209,32 +202,33 @@ export class UploadComponent implements OnInit {
         key: this.bResponse.key,
         location: this.bResponse.Location,
       };
-      console.log(filterParam);
+
       this.helperservice.performPostRequest(api, filterParam)?.subscribe((res: any) => {
         if (res.status) {
           this.uploadId = res.id;
           console.log(res);
           $('.msg').css('color', 'green');
-          $('.msg').text('Successfully uploaded to Server');
+          $('.msg').text('Package created. Now select users you want to send');
           $("#name").val("");
           $("#file").val("");
           this.usRegionStatus = true;
           this.loader();
+          $("#uploadForm").hide();
           $("#userForm").show();
         }
       });
     }
-
-
   }
 
-  submit() {
+  submit() 
+  {
 
     const downloader_id = this.formData.value.downloaders
-      .map((checked: any, i: string | number) => checked ? this.downloaderList[i].id : null)
-      .filter((v: null) => v !== null);
+    .map((checked: any, i: string | number) => checked ? this.downloaderList[i].id : null)
+    .filter((v: null) => v !== null);
 
-    if(downloader_id.length > 0) {
+    if(downloader_id.length > 0) 
+    {
       this.helperservice.showSiteLoader();
       let filterParam = {
         downloaderids: downloader_id,
@@ -244,9 +238,10 @@ export class UploadComponent implements OnInit {
       let api = 'transfer';
       this.helperservice.performPostRequest(api, filterParam)?.subscribe((res: any) => {
         if (res.status) {
+          $("#uploadForm").show();
           $("#userForm").hide();   
           $('.msg').css('color', 'green');
-          $('.msg').text('Successfully Transferred to Users');
+          $('.msg').text('Successfully sent to selected users.');
           this.usRegionStatus = true;
           this.loader();
         }
@@ -254,10 +249,10 @@ export class UploadComponent implements OnInit {
     } else {
       alert('choose at least one user');
     }
-   
+
 
   }
 
-   
+
 
 }

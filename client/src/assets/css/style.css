@@ -2402,7 +2402,8 @@ a {
   animation: none !important; }
 
 section.content {
-  margin: 100px 15px 0 315px;
+  margin: 0 15px 0 315px;
+  padding-top: 100px;
   -moz-transition: 0.5s;
   -o-transition: 0.5s;
   -webkit-transition: 0.5s;
