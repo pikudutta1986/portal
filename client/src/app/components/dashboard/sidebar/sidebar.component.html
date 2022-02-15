@@ -12,6 +12,13 @@
                     </a>
                 </li>
 
+                <li class="{{currentRoute == 'upload'? 'active': ''}}" *ngIf="userTypes == 'uploader'">
+                    <a [routerLink]="['/dashboard/upload']">
+                        <span class="material-icons">file_upload</span>
+                        <span>Upload</span>
+                    </a>
+                </li>
+                
                 <li class="{{currentRoute == 'uploadlist'? 'active': ''}}" *ngIf="userTypes == 'uploader'">
                     <a [routerLink]="['/dashboard/uploadlist']">
                         <span class="material-icons">playlist_add_check</span>
@@ -19,12 +26,7 @@
                     </a>
                 </li>
 
-                <li class="{{currentRoute == 'upload'? 'active': ''}}" *ngIf="userTypes == 'uploader'">
-                    <a [routerLink]="['/dashboard/upload']">
-                        <span class="material-icons">file_upload</span>
-                        <span>Upload</span>
-                    </a>
-                </li>
+                
                 
             </ul>
         </div>
