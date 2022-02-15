@@ -21,6 +21,8 @@ declare var require: any;
 
 export class UploadComponent implements OnInit {
 
+  usRegionStatus:boolean = false;
+
   formData: FormGroup;
   selectedFile: File;
   filePath: any;
@@ -43,6 +45,8 @@ export class UploadComponent implements OnInit {
 
   regionName:any = null;
 
+  uploadId:any = null;
+
   constructor(private helperservice: HelperService, public fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -54,13 +58,27 @@ export class UploadComponent implements OnInit {
     this.userData = sessionStorage.getItem('userData');
     this.saveBtnResponse = false;
     $("#saveBtn").hide();
-    console.log('userData', this.userData);
+    $("#userForm").hide();
+    this.default();   
+
+  }
+
+  default() {
+    this.helperservice.showSiteLoader();
     this.getUsersByRegion(this.userData);
+  }
+
+  loader() {
+    if(this.usRegionStatus) {
+      this.helperservice.hideSiteLoader();
+      this.usRegionStatus = false;
+    }
+    
 
   }
 
   ngAfterViewInit() {    
-    // this.addCheckboxesToForm();
+    
   }
 
   private addCheckboxesToForm(status: any) {
@@ -75,21 +93,10 @@ export class UploadComponent implements OnInit {
 
     this.filePath = event.target.value;
     this.selectedFile = event.target.files[0];
-
-    console.log(event);
-
   }
 
   onUpload() {
-
-    let api = 'fileUpload';
-    console.log(this.selectedFile);
-    // const fd = new FormData();
-    // fd.append('file', this.selectedFile, this.selectedFile.name);
-    // fd.append('userId', '2');
-    // this.helperservice.sendChunk(api,fd)?.subscribe((res) => {
-    //   console.log(res);
-    // });
+    let api = 'fileUpload';    
     let name = $("#name").val();
     if (name == '') {
       alert('Please Provide Name');
@@ -103,10 +110,10 @@ export class UploadComponent implements OnInit {
       this.uploadFile(this.selectedFile);
     }
 
-    console.log(this.filePath);
   }
 
   uploadFile(file: any) {
+
     const contentType = file.type;
 
     const bucket = new S3(
@@ -124,10 +131,10 @@ export class UploadComponent implements OnInit {
       ContentType: contentType
     };
 
-    console.log(contentType, params);
-
     let name = $("#name").val();
     if (name != '') {
+
+      this.helperservice.showSiteLoader();
 
       bucket.upload(params, (err: any, data: any) => {
         if (err) {
@@ -145,13 +152,8 @@ export class UploadComponent implements OnInit {
         this.bResponse.Location = data.Location;
         this.saveBtnResponse = true;
   
-        this.savePathToDb();
-  
-        // if (this.saveBtnResponse) {
-        //   $("#saveBtn").show();
-        // } else {
-        //   $("#saveBtn").hide();
-        // }
+        this.savePathToDb();  
+        
         return true;
       });
 
@@ -184,7 +186,9 @@ export class UploadComponent implements OnInit {
       if (res.status) {
         this.downloaderList = res.message;
         this.regionName = res.message[0].name;
-        this.addCheckboxesToForm(false);       
+        this.addCheckboxesToForm(false);  
+        this.usRegionStatus = true;
+        this.loader();     
         console.log(this.downloaderList);
       }
     });
@@ -208,9 +212,15 @@ export class UploadComponent implements OnInit {
       console.log(filterParam);
       this.helperservice.performPostRequest(api, filterParam)?.subscribe((res: any) => {
         if (res.status) {
+          this.uploadId = res.id;
           console.log(res);
-          // $('.msg').css('color', 'green');
-          // $('.msg').text('Successfully uploaded to Server');
+          $('.msg').css('color', 'green');
+          $('.msg').text('Successfully uploaded to Server');
+          $("#name").val("");
+          $("#file").val("");
+          this.usRegionStatus = true;
+          this.loader();
+          $("#userForm").show();
         }
       });
     }
@@ -225,35 +235,29 @@ export class UploadComponent implements OnInit {
       .filter((v: null) => v !== null);
 
     if(downloader_id.length > 0) {
+      this.helperservice.showSiteLoader();
       let filterParam = {
         downloaderids: downloader_id,
-        uploaderId: parseInt(this.userData)
+        uploaderId: parseInt(this.userData),
+        uploadId: parseInt(this.uploadId)
       };
       let api = 'transfer';
       this.helperservice.performPostRequest(api, filterParam)?.subscribe((res: any) => {
         if (res.status) {
-         this.attachedFileIds = res.message;    
-         this.isEnabled();     
+          $("#userForm").hide();   
+          $('.msg').css('color', 'green');
+          $('.msg').text('Successfully Transferred to Users');
+          this.usRegionStatus = true;
+          this.loader();
         }
       });
     } else {
       alert('choose at least one user');
     }
-    
    
 
   }
 
-  isEnabled() {
-    
-    var result = this.downloaderList.filter((o1: any) =>{
-      // filter out (!) items in result2
-      return !this.attachedFileIds.some((o2: any) =>{
-          return o1.id === o2.id;          // assumes unique id
-      });
-    });   
-    console.log(result);
-    
-  }
+   
 
 }

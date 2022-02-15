@@ -329,19 +329,25 @@ class UserController extends Controller
 
         $validated = $request->validate([
             'downloaderids' => 'required',
-            'uploaderId' => 'required',            
+            'uploaderId' => 'required',
+            'uploadId' => 'required',            
         ]);
 
-        $uploadDetails = upload::where('user_id', (int)$request->uploaderId)->first();
+        $uploadDetails = upload::where([
+                                    'user_id' => (int)$request->uploaderId,'id' => (int)$request->uploadId
+                                ])->first();
 
-        if(!empty($uploadDetails->id)) {
+        if(!empty($uploadDetails)) {
+
+            $sdk = [];
 
             foreach ($request->downloaderids as $downloaderId) {
 
                 $uploadAccessDetails = uploadAccess::where([
-                    'uploaderId' => (int)$request->uploaderId,
-                    'downloaderId' => (int)$downloaderId,
-                ])->first();
+                                                    'uploaderId' => (int)$request->uploaderId,
+                                                    'downloaderId' => (int)$downloaderId,
+                                                    'uploadId' => (int)$uploadDetails->id,
+                                                ])->first();
 
                 if(empty($uploadAccessDetails->id)) {
 
@@ -349,21 +355,22 @@ class UserController extends Controller
                         'uploaderId' => (int)$request->uploaderId,
                         'downloaderId' => (int)$downloaderId,
                         'uploadId' => (int)$uploadDetails->id,
-                    ]);
+                    ]);                   
+                    
+                    array_push($sdk,$user);
 
                 }
                 
             }
 
-            $uploadAccessDetails = uploadAccess::where('uploaderId', (int)$request->uploaderId)->get();
-    
             $response = [
-                'message' => $uploadAccessDetails,
-                'status' => true,
-            ];
-    
-            return response($response, 200);
+                        'message' => 'Successfully Transferred',
+                        'res' => $sdk,
+                        'status' => true,
+                    ];
             
+            return response($response, 200);
+
         }
         
     }
@@ -434,7 +441,8 @@ class UserController extends Controller
                     'name' => $res->name,
                     'location' => $res->location,
                     'size' => $res->size,
-                    'attachedUsers' => $p
+                    'attachedUsers' => $p,
+                    'id' => $res->id,
                   ];
                   array_push($sdk,$s);
                 }
@@ -454,6 +462,62 @@ class UserController extends Controller
 
             }
     
+            return response($response, 200);
+
+        }
+
+    }
+
+    function getDownloaders(Request $request) {
+
+        $validated = $request->validate([           
+            'user_id' => 'required',
+            'uploadId' => 'required',
+        ]);
+
+        if($validated) {
+            $user = User::where('id', $request->user_id)->first();
+            $data = DB::table('users')
+                                ->where('users.userType', '!=', $user->userType)
+                                ->join('regions', 'users.regions', '=', 'regions.id')
+                                ->where('users.regions', '=', $user->regions)                                
+                                ->select('users.*','regions.name')
+                                ->get();
+            $sdk = [];
+            foreach($data as $userData) {
+                
+                $datas = DB::table('upload_accesses')
+                                ->where('upload_accesses.downloaderId', '=', $userData->id) 
+                                ->where('upload_accesses.uploadId', '=', $request->uploadId)                            
+                                ->first();
+
+                if(empty($datas)) {
+
+                    $s = [                   
+                        'email' => $userData->email,
+                        'id' => $userData->id,
+                        'checked' => false
+                    ];
+
+                } else {
+
+                    $s = [                   
+                        'email' => $userData->email,
+                        'id' => $userData->id,
+                        'checked' => true
+                    ];
+
+                }
+
+                array_push($sdk,$s);
+
+            }
+            $response = [
+                'message' => 'success',
+                'res' => $sdk,
+                'status' => true,
+            ];
+
             return response($response, 200);
 
         }

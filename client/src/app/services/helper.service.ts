@@ -3,6 +3,8 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, CanActivateChild } from '@angular/router';
 import { environment } from './../../environments/environment';
 
+declare var $: any;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,6 +13,16 @@ export class HelperService {
   apiBase = environment.apiBase;
 
   constructor(private http: HttpClient) { }  
+
+  showSiteLoader() {
+    $('#loader').show();
+    $('body').addClass('stop-scrolling');
+  }
+
+  hideSiteLoader() {
+    $('#loader').hide();
+    $('body').removeClass('stop-scrolling');
+  }
 
   performPostRequest(endPoint: any, filterObject: any) {
 
