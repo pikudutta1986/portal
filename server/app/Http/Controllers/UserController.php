@@ -383,14 +383,20 @@ class UserController extends Controller
 
         if($validated) { 
             
-            $userAccessDetails = uploadAccess::where('downloaderId', $request->user_id)->first();
-            if(!empty($userAccessDetails->id)) {
+            $userAccessDetails = uploadAccess::where('downloaderId', $request->user_id)->get();
+            if(!empty($userAccessDetails)) {
 
-                $downloadDetails = upload::where('id', $userAccessDetails->uploadId)->get();
-           
+                $sdk = [];
+
+                foreach($userAccessDetails as $data) {
+
+                    $downloadDetails = upload::where('id', $data->uploadId)->first();
+                    array_push($sdk,$downloadDetails);
+                }
+
                 $response = [
                     'id' => $request->user_id,
-                    'message' => $downloadDetails,
+                    'message' => $sdk,
                     'status' => true,
                 ];
 
