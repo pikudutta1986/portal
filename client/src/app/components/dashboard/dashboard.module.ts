@@ -16,6 +16,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
 
 //IMPORTING DASHBOARD COMPONENT
 import { DashboradComponent } from './dashboard.component';
@@ -42,7 +45,9 @@ import { UploadlistComponent } from './content/uploadlist/uploadlist.component';
   HttpClientModule,
   MatCheckboxModule,
   MatTableModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatFormFieldModule,
+  MatInputModule
   ],
   declarations:
   [

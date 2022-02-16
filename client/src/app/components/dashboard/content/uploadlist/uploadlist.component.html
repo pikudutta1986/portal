@@ -40,9 +40,11 @@
                     <ng-container matColumnDef="symbol">
                       <th mat-header-cell *matHeaderCellDef> Action </th>
                       <td mat-cell *matCellDef="let element">
-                        <button mat-flat-button color="primary">
+                        <button mat-flat-button color="primary" style="margin-right: 3%;">
                             <a  href="{{element.location}}" target="_blank">Download</a>
                         </button>
+
+                        <button mat-flat-button color="primary" (click)="getDownloaders(element)">Edit</button>
                           
                       </td>
                     </ng-container>
@@ -62,3 +64,55 @@
         </div>
     </div>
 </section>
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <!-- <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div> -->
+      <div class="modal-body">
+        <form id="userForm" [formGroup]="formData" (ngSubmit)="submit()" >
+
+          <h2 class="card-header info-color white-text text-center py-4 tBg" >
+            <strong>Update File Details and User Accessibility</strong>
+          </h2>  
+
+          <div class="tMsg" style="text-align: center;padding-bottom: 3%;"><span ></span></div>
+
+          <div class="example-container">
+            <mat-form-field  appearance="fill" class="inputWidth">
+              <mat-label>File Name</mat-label>
+              <input matInput #input formControlName="fileName">
+              <input type="hidden" formControlName="uploadId">
+            </mat-form-field>            
+          </div>
+
+          <div class="example-container">
+            <mat-form-field  appearance="fill" class="inputWidth">
+              <mat-label>Description</mat-label>
+              <input matInput #input formControlName="fileDescription">
+            </mat-form-field>    
+          </div>
+
+          <div>
+            <section formArrayName="downloaders" class="example-section" *ngFor="let downloader of ordersFormArray.controls; let i = index">
+              <mat-checkbox [formControlName]="i" class="example-margin" *ngIf="chk" >{{downloaderList[i].email}}</mat-checkbox>
+            </section>  
+          </div>
+          <br/>
+          <button class="btn btn-primary" >Update</button>                                  
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="close()" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>

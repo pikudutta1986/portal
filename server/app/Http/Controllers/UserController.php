@@ -524,5 +524,76 @@ class UserController extends Controller
 
     }
 
+    function updateUserAccess(Request $request) {
+
+        $validated = $request->validate([
+            'downloaderids' => '',
+            'uploaderId' => 'required',
+            'uploadId' => 'required',
+            'fileName' => 'required',
+            'fileDescription' => 'required',            
+        ]);
+
+        if($validated) {   
+
+            $uploadDetails = upload::find((int)$request->uploadId);            
+            $uploadDetails->name = $request->fileName;
+            $uploadDetails->description = $request->fileDescription;            
+            $uploadDetails->save();            
+
+            if( empty($request->downloaderids)) {
+
+                $affectedRows = uploadAccess::where([
+                                                'uploaderId' => (int)$request->uploaderId,
+                                                'uploadId' => (int)$request->uploadId,
+                                            ])->delete();
+
+                $z = $affectedRows;
+
+            } else {
+
+                $affectedRows = uploadAccess::where([
+                                                    'uploaderId' => (int)$request->uploaderId,
+                                                    'uploadId' => (int)$request->uploadId,
+                                                ])->delete();
+
+                $z = [];
+                foreach ($request->downloaderids as $downloaderId) {
+
+                    $uploadAccessDetails = uploadAccess::where([
+                                                        'uploaderId' => (int)$request->uploaderId,
+                                                        'downloaderId' => (int)$downloaderId,
+                                                        'uploadId' => (int)$uploadDetails->id,
+                                                    ])->first();
+    
+                    if(empty($uploadAccessDetails->id)) {
+    
+                        $user = uploadAccess::create([
+                            'uploaderId' => (int)$request->uploaderId,
+                            'downloaderId' => (int)$downloaderId,
+                            'uploadId' => (int)$uploadDetails->id,
+                        ]);                   
+                        
+                        array_push($z,$user);
+    
+                    } 
+                    
+                }
+
+            }
+
+            $response = [
+                'message' => 'Successfully Updated',
+                'res' => $uploadDetails,
+                'useraccess' => $z,
+                'status' => true,
+            ];
+    
+            return response($response, 200);
+
+        }
+
+    }
+
 
 }

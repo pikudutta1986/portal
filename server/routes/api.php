@@ -35,7 +35,9 @@ use App\Http\Controllers\RegionController;
         Route::post('/transfer', [UserController::class, 'transfer']); 
         Route::post('/getDownloadList', [UserController::class, 'getDownloadList']);   
         Route::post('/getUploadList', [UserController::class, 'getUploadList']);  
-        Route::post('/getDownloaders', [UserController::class, 'getDownloaders']);    
+        Route::post('/getDownloaders', [UserController::class, 'getDownloaders']);  
+        Route::post('/updateUserAccess', [UserController::class, 'updateUserAccess']);  
+        
     
     });
    
