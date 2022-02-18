@@ -78,6 +78,7 @@ export class UploadComponent implements OnInit {
   }
 
   ngAfterViewInit() {    
+    // $("#userForm").hide();
 
   }
 

@@ -44,6 +44,8 @@ export class SidebarComponent implements OnInit {
   logout() {
 
     if(this.authService.isLoggedIn()) {
+
+      this.helperService.showSiteLoader();
       
       let filterparam: any = sessionStorage.getItem('access_token');      
       
@@ -54,6 +56,7 @@ export class SidebarComponent implements OnInit {
         sessionStorage.removeItem('access_token');
         sessionStorage.removeItem('userData');        
         console.log(res);
+        this.helperService.hideSiteLoader();
         this.router.navigate(['/']);
       })
 

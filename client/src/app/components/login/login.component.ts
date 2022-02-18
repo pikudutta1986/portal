@@ -104,6 +104,8 @@ export class LoginComponent implements OnInit {
 
 	login() {
 
+		this.helperService.showSiteLoader();
+
 		$('.msg').css('color', '');
 
 		// let a = this.formData.controls['username'].setValue('tushart');
@@ -129,6 +131,7 @@ export class LoginComponent implements OnInit {
 			if (result.status) {
 
 				this.setAccessToken(result);
+				this.helperService.hideSiteLoader();
 				this.router.navigate(['/dashboard']);
 
 			} else {
