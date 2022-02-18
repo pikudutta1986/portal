@@ -31,6 +31,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { UploadComponent } from './content/upload/upload.component';
 import { DownloadComponent } from './content/download/download.component';
 import { UploadlistComponent } from './content/uploadlist/uploadlist.component';
+import { SurveyOneComponent } from './content/upload/survey-one/survey-one.component';
+import { SurveyTwoComponent } from './content/upload/survey-two/survey-two.component';
 
 
 // AN ANGULAR DECORATOR THAT IDENTIFIES THE MODULE'S OWN COMPONENTS, DIRECTIVES, AND PIPES, SO THAT EXTERNAL COMPONENTS CAN USE THEM.
@@ -56,7 +58,9 @@ import { UploadlistComponent } from './content/uploadlist/uploadlist.component';
   SidebarComponent,
   UploadComponent,
   DownloadComponent,
-  UploadlistComponent
+  UploadlistComponent,
+  SurveyOneComponent,
+  SurveyTwoComponent
   ],
   exports: [
   DashboradComponent,    

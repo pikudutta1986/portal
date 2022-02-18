@@ -1,0 +1,22 @@
+<div class="row" id="userForm">
+    <div class="col-md-12">
+      <form  [formGroup]="formData" (ngSubmit)="submit()" style="padding-top: 5%;">
+        <h4 style="text-align: center;">
+          <strong>Survey One:</strong>
+        </h4>  
+
+        <div class="formStyle">
+            <mat-form-field appearance="fill" class="matFormFields">
+              <mat-label>Enter some input</mat-label>
+              <input matInput #input formControlName="name"  placeholder="Name">
+            </mat-form-field>
+          
+            <mat-form-field appearance="fill">
+                <input matInput formControlName="other" #input placeholder="Other">             
+            </mat-form-field>
+          </div>
+        <br/>
+        <button class="btn btn-primary" type="submit" [disabled]="!formData.valid">Send</button>                                  
+      </form>
+    </div>
+  </div>
