@@ -1,0 +1,81 @@
+.logo-container
+{
+  text-align: center;
+  margin-bottom: 1.5vw;
+}
+
+h3
+{
+  text-align: center;
+  font-size: 1.4vw;
+  margin: 0 0 2vw 0;
+  padding: 0;
+  color: rgba(26, 32, 44, 0.8);
+}
+
+.whitebox
+{
+  background: #fff;
+  padding: 2vw 3vw 3vw;
+  box-shadow: 0px 10px 10px rgba(67, 104, 138, 0.17);
+  border-radius: 13.9648px;
+}
+
+.form-row label
+{
+  display: block;
+  color: rgba(26, 32, 44, 0.8);
+}
+
+.form-row-wrapper
+{
+  position: relative; 
+  margin-top: 2vh
+}
+
+.form-button-row
+{
+  margin: 1.5vw 0;
+}
+
+.text-center
+{
+  text-align: center;
+}
+
+.text-center a
+{
+  color: #25ADB1;
+  text-decoration: none;
+}
+
+.errorbox
+{
+  min-height: 1.7vw;
+  margin-bottom: 1vh;
+}
+
+.errorboxborder{
+  border: 1px solid red;
+}
+
+.messagebox
+{
+  height: 2vw;
+  text-align: center;
+  font-weight: bold;
+}
+
+.btnss:hover {
+  cursor: pointer;
+  /* background-color: #3e8e41; */
+}
+
+/* .login-page .login-box .logo small {
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  margin-top: 5px;
+} */
+

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RegionController;
+use App\Http\Controllers\AccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,10 +17,12 @@ use App\Http\Controllers\RegionController;
 |
 */
     
+    Route::post('/referalRegister', [AccountController::class, 'referalRegister']);
     Route::post('/register', [UserController::class, 'register']);
     Route::post('/login', [UserController::class, 'login']);
     Route::post('/resetPassword', [UserController::class, 'resetPassword']);
     Route::get('/regions', [RegionController::class, 'index']);
+    Route::post('/checkTokenForRegister', [AccountController::class, 'checkTokenForRegister']);
     
 
     Route::group(['middleware' => 'AuthKey'],function() {	
@@ -36,7 +39,10 @@ use App\Http\Controllers\RegionController;
         Route::post('/getDownloadList', [UserController::class, 'getDownloadList']);   
         Route::post('/getUploadList', [UserController::class, 'getUploadList']);  
         Route::post('/getDownloaders', [UserController::class, 'getDownloaders']);  
-        Route::post('/updateUserAccess', [UserController::class, 'updateUserAccess']);  
+        Route::post('/updateUserAccess', [UserController::class, 'updateUserAccess']); 
+        
+        Route::post('/refer', [AccountController::class, 'refer']); 
+       
         
     
     });

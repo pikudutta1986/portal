@@ -1,0 +1,32 @@
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row" id="userForm">
+            <div class="col-md-12">
+
+                <div class="card">
+                    <div class="card-body px-lg-5 pt-0" style="padding: 20px;">
+                        <form  [formGroup]="formData" (ngSubmit)="submit()" style="padding-top: 5%;">
+                            <h4 style="text-align: center;">
+                              <strong>Generate Link For Account Type B Creation:</strong>
+                            </h4>  
+                    
+                            <div class="formStyle">
+                                <mat-form-field appearance="fill" class="matFormFields" style="width: 100%;">
+                                  <mat-label>Email Id</mat-label>
+                                  <input matInput #input formControlName="email"  placeholder="Email Id" autocomplete="off">
+                                </mat-form-field>
+                              </div>
+                            <br/>
+                            <button class="btn btn-primary" type="submit" [disabled]="!formData.valid">Generate Link</button>                                  
+                          </form>
+                    </div>
+                </div>
+             
+            </div>
+        </div>
+    </div>
+</section>
+      
+
+

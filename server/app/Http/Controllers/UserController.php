@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Account;
 use App\Models\upload;
 use App\Models\uploadAccess;
 use Illuminate\Support\Facades\Hash;
@@ -15,6 +16,57 @@ class UserController extends Controller
     function index() {
 
         return User::all();
+
+    }
+
+    function register(Request $request) {
+
+        $validated = $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'regions' => 'required',
+            'password' => 'required',
+        ]);
+
+        $user = DB::table('users')
+                        ->where('email', '=', $request->email)
+                        ->orWhere('phone', $request->phone)
+                        ->first();
+
+        if(empty($user)) {  
+
+            $user = User::create([
+                'firstname' => $request->firstname,
+                'lastname' => $request->lastname,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'regions' => (int)$request->regions,
+                'userType' => $request->userType,
+                'password' => Hash::make($request->password)
+            ]);
+
+            $response = [
+                        'user' => $user,
+                        'message' => 'Successfully Registered',
+                        'token' => null,
+                        'status' => true,
+                    ];
+            
+            return response($response, 200);
+
+        } else {
+
+            $response = [                
+                'message' => 'Data already Registered',
+                'token' => null,
+                'status' => false,
+            ];
+    
+            return response($response, 200);
+
+        }        
 
     }
 
@@ -70,59 +122,6 @@ class UserController extends Controller
             ];
     
             return response($response, 201);
-        }        
-
-    }
-
-    function register(Request $request) {
-
-        $validated = $request->validate([
-            'firstname' => 'required',
-            'lastname' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-            'regions' => 'required',
-            'password' => 'required',
-        ]);
-
-        $user = DB::table('users')
-                        ->where('email', '=', $request->email)
-                        ->orWhere('phone', $request->phone)
-                        ->first();
-
-        // $user = User::where('email', $request->email)->first();
-
-        if(empty($user)) {
-
-            $user = User::create([
-                'firstname' => $request->firstname,
-                'lastname' => $request->lastname,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'regions' => (int)$request->regions,
-                'userType' => $request->userType,
-                'password' => Hash::make($request->password)
-            ]);
-
-            $response = [
-                        'user' => $user,
-                        'message' => 'Successfully Registered',
-                        'token' => null,
-                        'status' => true,
-                    ];
-            
-            return response($response, 200);
-
-        } else {
-
-            $response = [                
-                'message' => 'Data already Registered',
-                'token' => null,
-                'status' => false,
-            ];
-    
-            return response($response, 200);
-
         }        
 
     }

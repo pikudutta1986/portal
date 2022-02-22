@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
+import { SignUpComponent } from './components/vendor/sign-up/sign-up.component';
 
 // TBD
 const routes: Routes =
@@ -26,7 +27,15 @@ const routes: Routes =
     path: 'dashboard',
     canActivate: [AuthGuard],
     loadChildren:() => import ('./components/dashboard/dashboard.module').then(m => m.dashboardModule)
-  }
+  },
+  {
+    // LOADS DASHBOARD MODULE
+    path: 'vendor/signUp',
+    component: SignUpComponent
+    // canActivate: [AuthGuard],
+    // loadChildren:() => import ('./components/vendor/dashboard.module').then(m => m.dashboardModule)
+  },
+
 ];
 
 

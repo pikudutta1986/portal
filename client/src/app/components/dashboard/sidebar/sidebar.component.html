@@ -5,24 +5,31 @@
         <div class="menu">
             <ul class="list">
                 <li class="header">Welcome <a type="button" class="logout" (click)="logout()"><span class="material-icons">logout</span></a></li>
-                <li class="{{currentRoute == 'download'? 'active': ''}}" *ngIf="userTypes == 'downloader'">
+                <li class="{{currentRoute == 'download'? 'active': ''}}" *ngIf="userTypes == 'B'">
                     <a [routerLink]="['/dashboard/download']" >
                         <span class="material-icons">playlist_add_check</span>
                         <span>Downloads</span>
                     </a>
                 </li>
 
-                <li class="{{currentRoute == 'upload'? 'active': ''}}" *ngIf="userTypes == 'uploader'">
+                <li class="{{currentRoute == 'upload'? 'active': ''}}" *ngIf="userTypes == 'A'">
                     <a [routerLink]="['/dashboard/upload']">
                         <span class="material-icons">file_upload</span>
                         <span>Upload</span>
                     </a>
                 </li>
                 
-                <li class="{{currentRoute == 'uploadlist'? 'active': ''}}" *ngIf="userTypes == 'uploader'">
+                <li class="{{currentRoute == 'uploadlist'? 'active': ''}}" *ngIf="userTypes == 'A'">
                     <a [routerLink]="['/dashboard/uploadlist']">
                         <span class="material-icons">playlist_add_check</span>
                         <span>Upload List</span>
+                    </a>
+                </li>
+
+                <li class="{{currentRoute == 'refer'? 'active': ''}}" *ngIf="userTypes == 'A'">
+                    <a [routerLink]="['/dashboard/refer']">
+                        <span class="material-icons">playlist_add_check</span>
+                        <span>Refer</span>
                     </a>
                 </li>
 

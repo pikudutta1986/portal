@@ -11,11 +11,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { dashboardModule } from './components/dashboard/dashboard.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SignUpComponent } from './components/vendor/sign-up/sign-up.component';
 
 
 @NgModule({
   declarations: [
-  AppComponent
+  AppComponent,
+  SignUpComponent
   ],
   imports: [
   BrowserModule,

@@ -36,6 +36,8 @@ export class DownloadComponent implements OnInit {
   }
 
   getDownloadList() {   
+
+    this.helperservice.showSiteLoader();
       
     let api = 'getDownloadList';
 
@@ -51,7 +53,7 @@ export class DownloadComponent implements OnInit {
            
             this.dataSource = new MatTableDataSource( returnData );
           });
-          
+          this.helperservice.hideSiteLoader();
         }
       });
 

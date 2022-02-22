@@ -33,6 +33,7 @@ import { DownloadComponent } from './content/download/download.component';
 import { UploadlistComponent } from './content/uploadlist/uploadlist.component';
 import { SurveyOneComponent } from './content/upload/survey-one/survey-one.component';
 import { SurveyTwoComponent } from './content/upload/survey-two/survey-two.component';
+import { ReferalComponent } from './content/referal/referal.component';
 
 
 // AN ANGULAR DECORATOR THAT IDENTIFIES THE MODULE'S OWN COMPONENTS, DIRECTIVES, AND PIPES, SO THAT EXTERNAL COMPONENTS CAN USE THEM.
@@ -60,7 +61,8 @@ import { SurveyTwoComponent } from './content/upload/survey-two/survey-two.compo
   DownloadComponent,
   UploadlistComponent,
   SurveyOneComponent,
-  SurveyTwoComponent
+  SurveyTwoComponent,
+  ReferalComponent
   ],
   exports: [
   DashboradComponent,    
