@@ -26,9 +26,12 @@ export class ReferalComponent implements OnInit {
       email: [ '', Validators.required],
     });
     this.userId = sessionStorage.getItem('userData');
+    $('.msg').text('');
   }
 
   submit() {
+
+    this.helperService.showSiteLoader();
 
     let email = this.formData.value.email;
     // let other = this.formData.value.other;
@@ -39,12 +42,13 @@ export class ReferalComponent implements OnInit {
       // other: other,
     };
 
-    console.log(filterParam);
     let api = 'refer';
     this.helperService.performPostRequest(api, filterParam)?.subscribe((res: any) => {
       if (res.status) {
-        console.log(res);
-      }
+        $('.msg').css('color', 'green');
+        $('.msg').text(res.message);
+      } 
+      this.helperService.hideSiteLoader();
     });
 
   }

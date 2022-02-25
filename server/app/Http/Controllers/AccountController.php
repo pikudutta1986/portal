@@ -16,24 +16,61 @@ class AccountController extends Controller
 
         $validated = $request->validate([
             'email' => 'required',
-            'userId' => 'required',           
+            'userId' => 'required|email',           
         ]);
 
         if($validated) {
 
             $token = Str::random(32);
 
-            $generatedLink = "http://localhost:4200/#/vendor/signUp?referralId=$request->userId&token=$token"; 
-
+            $generatedLink = "http://206.189.231.209/#/vendor/signUp?referralId=$request->userId&token=$token"; 
+            
+            $baseUrl = url('');
+            $referLink = url("#/vendor/signUp?referralId={$request->userId}&token={$token}");
+            
+            $link = $baseUrl.'/'.$referLink;
+            
             $user = Account::create([
                         'referralId' => $request->userId,
                         'token' => $token,
                         'status' => 1,                        
                     ]);
 
+            $to = $request->email;
+            $subject = "Auto Generated Link For Registration on Portal";
+
+            $message = "
+                    <html>
+                    <head>
+                    <title>HTML email</title>
+                    </head>
+                    <body>
+                    <p>This email contains HTML Tags!</p>
+                    <table>
+                    <tr>
+                    <th></th>
+                    </tr>
+                    <tr>
+                    <td>{$generatedLink}</td>
+                    </tr>
+                    </table>
+                    </body>
+                    </html>
+                ";
+
+            // Always set content-type when sending HTML email
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+            // More headers
+            $headers .= 'From: <support@tucoportal.com>' . "\r\n";
+            $headers .= 'Cc: admin@tucoportal.com' . "\r\n";
+
+            mail($to,$subject,$message,$headers);
+
             $response = [
                 'link' => $generatedLink,               
-                'message' => 'Link Generated',
+                'message' => 'Link Generated For'.''.$to ,
                 'token' => null,
                 'status' => true,
             ];
