@@ -15,8 +15,8 @@ class AccountController extends Controller
     function refer(Request $request) {
 
         $validated = $request->validate([
-            'email' => 'required',
-            'userId' => 'required|email',           
+            'email' => 'required|email',
+            'userId' => 'required',           
         ]);
 
         if($validated) {
