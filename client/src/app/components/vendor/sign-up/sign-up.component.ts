@@ -132,11 +132,11 @@ export class SignUpComponent implements OnInit {
 			if (res.status) {
 				console.log('status', res.status);
 				this.regFormData.reset();
-				$('.msg').text('Successfully Registered with us !');
+				$('.msg').text(res.message);
 				$('.msg').css('color', 'green');
 				$("#regForm").hide();
 			} else {
-				$('.msg').text('Kindly check your email-id or Phone');
+				$('.msg').text(res.message);
 				$('.msg').css('color', 'red');
 			}
 

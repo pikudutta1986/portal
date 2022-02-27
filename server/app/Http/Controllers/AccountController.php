@@ -21,56 +21,71 @@ class AccountController extends Controller
 
         if($validated) {
 
-            $token = Str::random(32);
-
-            $generatedLink = "http://206.189.231.209/#/vendor/signUp?referralId=$request->userId&token=$token"; 
+            $referDetail = Account::where('emailId', $request->email)->first();
             
-            $baseUrl = url('');
-            $referLink = url("#/vendor/signUp?referralId={$request->userId}&token={$token}");
-            
-            $link = $baseUrl.'/'.$referLink;
-            
-            $user = Account::create([
-                        'referralId' => $request->userId,
-                        'token' => $token,
-                        'status' => 1,                        
-                    ]);
+            if(empty($referDetail)) {
 
-            $to = $request->email;
-            $subject = "Auto Generated Link For Registration on Portal";
+                $token = Str::random(32);
 
-            $message = "
-                    <html>
-                    <head>
-                    <title>HTML email</title>
-                    </head>
-                    <body>
-                    <p>This email contains HTML Tags!</p>
-                    <table>
-                    <tr>
-                    <th></th>
-                    </tr>
-                    <tr>
-                    <td>{$generatedLink}</td>
-                    </tr>
-                    </table>
-                    </body>
-                    </html>
-                ";
+                $generatedLink = "http://206.189.231.209/#/vendor/signUp?referralId=$request->userId&token=$token"; 
+                // $generatedLink ="http://localhost:4200/#/vendor/signUp?referralId=$request->userId&token=$token";
+                $baseUrl = url('');
+                $referLink = url("#/vendor/signUp?referralId={$request->userId}&token={$token}");
+                
+                $link = $baseUrl.'/'.$referLink;
+                
+                $user = Account::create([
+                            'referralId' => $request->userId,
+                            'token' => $token,
+                            'emailId' => $request->email,
+                            'status' => 'P',                        
+                        ]);
 
-            // Always set content-type when sending HTML email
-            $headers = "MIME-Version: 1.0" . "\r\n";
-            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+                $to = $request->email;
+                $subject = "Auto Generated Link For Registration on Portal";
 
-            // More headers
-            $headers .= 'From: <support@tucoportal.com>' . "\r\n";
-            $headers .= 'Cc: admin@tucoportal.com' . "\r\n";
+                $message = "
+                        <html>
+                        <head>
+                        <title>HTML email</title>
+                        </head>
+                        <body>
+                        <p>This email contains HTML Tags!</p>
+                        <table>
+                        <tr>
+                        <th></th>
+                        </tr>
+                        <tr>
+                        <td>{$generatedLink}</td>
+                        </tr>
+                        </table>
+                        </body>
+                        </html>
+                    ";
 
-            mail($to,$subject,$message,$headers);
+                // Always set content-type when sending HTML email
+                $headers = "MIME-Version: 1.0" . "\r\n";
+                $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+                // More headers
+                $headers .= 'From: <support@tucoportal.com>' . "\r\n";
+                $headers .= 'Cc: admin@tucoportal.com' . "\r\n";
+
+                mail($to,$subject,$message,$headers);
+                $link = $generatedLink;
+                $msg = 'Link Generated For '.''.$to;
+
+            } else {
+                
+                $data = User::find($referDetail->referralId);
+                $link = null;
+                $msg = 'This user is already referred by '.''.$data->email;
+
+            }
 
             $response = [
-                'link' => $generatedLink,               
-                'message' => 'Link Generated For'.''.$to ,
+                'link' => $link,               
+                'message' => $msg ,
                 'token' => null,
                 'status' => true,
             ];
@@ -93,7 +108,7 @@ class AccountController extends Controller
             $data = Account::where([
                                     'referralId' => (int)$request->userId,
                                     'token' => $request->token,
-                                    'status' => 1
+                                    'status' => 'P'
                                 ])->first();
             if(empty($data)) {
 
@@ -145,51 +160,79 @@ class AccountController extends Controller
             'phone' => 'required',
             'regions' => 'required',
             'password' => 'required',
+            'token' => 'required',
+            'refererralId' => 'required'
         ]);
 
-        $user = DB::table('users')
-                        ->where('email', '=', $request->email)
-                        ->orWhere('phone', $request->phone)
-                        ->first();
-
-        if(empty($user)) {          
-
+        if($validated) {
+            
             $data = Account::where([
-                                'token' => $request->token,
-                                'status' => 1
-                            ])->update(['status' => $request->refererralId]);
-            
+                            'referralId' => (int)$request->refererralId,
+                            'token' => $request->token,
+                            'emailId' => $request->email,
+                            'status' => 'P'
+                        ])->first();
 
-            $user = User::create([
-                'firstname' => $request->firstname,
-                'lastname' => $request->lastname,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'regions' => (int)$request->regions,
-                'userType' => $request->userType,
-                'password' => Hash::make($request->password)
-            ]);
+            if(!empty($data)) {
 
-            $response = [
-                        'user' => $user,
-                        'message' => 'Successfully Registered',
+                $user = DB::table('users')
+                                ->where('email', '=', $request->email)
+                                ->orWhere('phone', $request->phone)
+                                ->first();
+
+                if(empty($user)) {          
+
+                    $data = Account::where([
+                                        'token' => $request->token,
+                                        'status' => 'P'
+                                    ])->update(['status' => 'C']);                    
+
+                    $user = User::create([
+                        'firstname' => $request->firstname,
+                        'lastname' => $request->lastname,
+                        'email' => $request->email,
+                        'phone' => $request->phone,
+                        'regions' => (int)$request->regions,
+                        'userType' => $request->userType,
+                        'password' => Hash::make($request->password)
+                    ]);
+
+                    $response = [
+                                'user' => $user,
+                                'message' => 'Successfully Registered with us !',
+                                'token' => null,
+                                'status' => true,
+                            ];
+                    
+                    return response($response, 200);
+
+                } else {
+
+                    $response = [                
+                        'message' => 'You are already Registered with us !',
                         'token' => null,
-                        'status' => true,
+                        'status' => false,
                     ];
+
+                    return response($response, 200);
+
+                }   
+
+            } else {
+                
+                $response = [                
+                    'message' => 'Invalid email Id with referral Code',
+                    'token' => null,
+                    'status' => false,
+                ];
+
+                return response($response, 200);
+            }
+
             
-            return response($response, 200);
+        }
 
-        } else {
-
-            $response = [                
-                'message' => 'Data already Registered',
-                'token' => null,
-                'status' => false,
-            ];
-    
-            return response($response, 200);
-
-        }        
+            
 
     }
 }

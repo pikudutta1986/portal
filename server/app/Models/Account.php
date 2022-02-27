@@ -10,6 +10,6 @@ class Account extends Model
     use HasFactory;
 
     protected $fillable = [
-        'referralId', 'token', 'status'  
+        'referralId', 'token', 'emailId', 'status'  
     ];
 }
