@@ -78,8 +78,14 @@ class AccountController extends Controller
             } else {
                 
                 $data = User::find($referDetail->referralId);
+                $referralStatus = $referDetail->status;
                 $link = null;
-                $msg = 'This user is already referred by '.''.$data->email;
+                if($referralStatus == 'P') {
+                    $status = 'referred';
+                } else {
+                    $status = 'registered';
+                }
+                $msg = 'This user is already'.' '.$status.' '.'by'.' '.$data->email;
 
             }
 
