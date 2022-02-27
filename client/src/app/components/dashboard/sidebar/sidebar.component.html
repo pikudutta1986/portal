@@ -33,6 +33,13 @@
                     </a>
                 </li>
 
+                <li class="{{currentRoute == 'referList'? 'active': ''}}" *ngIf="userTypes == 'A'">
+                    <a [routerLink]="['/dashboard/referList']">
+                        <span class="material-icons">playlist_add_check</span>
+                        <span>Refer List</span>
+                    </a>
+                </li>
+
                 
                 
             </ul>

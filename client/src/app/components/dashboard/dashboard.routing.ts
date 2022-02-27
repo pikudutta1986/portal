@@ -22,6 +22,7 @@ import {UploadComponent} from './content/upload/upload.component';
 import { DownloadComponent } from './content/download/download.component';
 import { UploadlistComponent } from './content/uploadlist/uploadlist.component';
 import { ReferalComponent } from './content/referal/referal.component';
+import { ReferListComponent } from './content/refer-list/refer-list.component';
 
 // DEFINING THE ROUTINGS
 const routes: Routes = 
@@ -36,6 +37,7 @@ const routes: Routes =
       {path: 'uploadlist', component: UploadlistComponent},
       {path: 'download', component: DownloadComponent},
       {path: 'refer', component: ReferalComponent},
+      {path: 'referList', component: ReferListComponent},
     ]
   }
 ];

@@ -42,7 +42,8 @@ use App\Http\Controllers\AccountController;
         Route::post('/updateUserAccess', [UserController::class, 'updateUserAccess']); 
         
         Route::post('/refer', [AccountController::class, 'refer']); 
-       
+        Route::post('/referList', [AccountController::class, 'referList']); 
+        Route::post('/removeFromReferList', [AccountController::class, 'removeFromReferList']);       
         
     
     });

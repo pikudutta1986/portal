@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiBase: 'http://206.189.231.209/server/index.php/api/'
-  // apiBase: 'http://localhost:8000/api/'
+  // apiBase: 'http://206.189.231.209/server/index.php/api/'
+  apiBase: 'http://localhost:8000/api/'
 };
 
 /*

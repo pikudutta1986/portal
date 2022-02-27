@@ -124,11 +124,13 @@ class AccountController extends Controller
 
             } else {
 
-                $creationTime = date("Y-m-d H:i:s A", strtotime($data->created_at));
+                $creationTime = date("Y-m-d H:i:s", strtotime($data->created_at));                
 
-                $expiredTime = date('Y-m-d H:i:s A', strtotime($creationTime . ' + 12 hours'));
+                $expiredTime = date('Y-m-d H:i:s', strtotime($creationTime . ' + 12 hours'));                
 
-                $currenttime = date("Y-m-d H:i:s A");                               
+                // $new_time = date("Y-m-d H:i:s", strtotime('+3 hours', strtotime($creationTime))); 
+                
+                $currenttime = date("Y-m-d H:i:s"); 
 
                 if($currenttime < $expiredTime) {                   
                     
@@ -239,6 +241,67 @@ class AccountController extends Controller
         }
 
             
+
+    }
+
+    function referList(Request $request) {
+        
+        $validated = $request->validate([
+            'userId' => 'required',           
+        ]);
+
+        if($validated) { 
+            
+            $data = Account::where([
+                                    'referralId' => (int)$request->userId,
+                                ])->get();
+            
+            if(empty($data)) {
+
+                $msg = [];
+                $status = false;
+                $res = 'NO DATA AVAILABLE';
+
+            } else {
+
+                $msg = $data;
+                $status = true;
+                $res = 'success';
+
+            }
+
+            $response = [                
+                'message' => $msg,
+                'res' => $res,
+                'status' => $status,
+            ];
+
+            return response($response, 200);
+
+        }
+    }
+
+    function removeFromReferList(Request $request) {
+
+        $validated = $request->validate([
+            'accountsId' => 'required',           
+        ]);
+
+        if($validated) {
+
+            $data = Account::find((int)$request->accountsId);
+        
+            $data->delete();
+
+            $response = [                
+                'message' => 'Successfully removed from Referal List !',
+                'token' => null,
+                'status' => true,
+            ];
+
+            return response($response, 200);
+
+        }
 
     }
 }
