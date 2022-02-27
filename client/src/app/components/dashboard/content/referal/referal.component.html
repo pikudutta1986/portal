@@ -22,8 +22,15 @@
                             <br/>
                             <button class="btn btn-primary" type="submit" [disabled]="!formData.valid">Generate Link</button>                                  
                           </form>
+
+                          <div class="generatedLink">
+                            <span style="padding: 1%;">Generated Link:</span>
+                            <a href="{{generatedLink}}" target="_blank">{{generatedLink}}</a>                  
+                          </div>
                     </div>
                 </div>
+
+               
              
             </div>
         </div>

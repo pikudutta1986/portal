@@ -18,6 +18,7 @@ export class ReferalComponent implements OnInit {
 
   formData: FormGroup;
   userId: any;
+  generatedLink:any = '';
 
   constructor(private helperService: HelperService, public fb: FormBuilder) { }
 
@@ -45,6 +46,7 @@ export class ReferalComponent implements OnInit {
     let api = 'refer';
     this.helperService.performPostRequest(api, filterParam)?.subscribe((res: any) => {
       if (res.status) {
+        this.generatedLink = res.link;
         $('.msg').css('color', 'green');
         $('.msg').text(res.message);
       } 

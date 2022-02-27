@@ -9,3 +9,11 @@
 .msgStyle {
     padding: 20px;text-align: center;font-size: 18px;
 }
+
+.generatedLink {
+    margin-top: 20px;
+    background-color: beige;
+    height: 60px;
+    align-items: center;
+    display: flex;
+}
