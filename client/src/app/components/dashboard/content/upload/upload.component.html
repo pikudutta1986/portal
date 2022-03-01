@@ -10,7 +10,7 @@
               <strong>Upload file and share with other users in - {{ regionName }}</strong>
             </h2>
             <div class="msg" style="padding: 20px;"><span></span></div>
-            <div class="row" id="uploadForm">
+            <div class="row" id="uploadForm" *ngIf="uploadFormView">
               <div class="col-md-6">
               <!-- Form -->
               <form enctype="multipart/form-data"  action="#">
@@ -33,7 +33,7 @@
               <!-- Form -->
               </div>
             </div>
-            <div class="row" id="userForm">
+            <div class="row" id="userForm" *ngIf="userFormView">
               <div class="col-md-6">
                 <form  [formGroup]="formData" (ngSubmit)="submit()" style="padding-top: 5%;">
                   <h4>

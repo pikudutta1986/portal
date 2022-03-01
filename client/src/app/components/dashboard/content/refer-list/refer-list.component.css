@@ -2,6 +2,11 @@ table {
     width: 100%;
  }
  
- .msgStyle {
+.msgStyle {
     padding: 20px;text-align: center;font-size: 18px;
+}
+
+.addNewBtn {
+    float: right;
+    margin-bottom: 1%;
 }

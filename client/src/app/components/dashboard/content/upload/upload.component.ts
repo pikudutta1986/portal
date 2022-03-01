@@ -22,7 +22,7 @@ declare var require: any;
 
 export class UploadComponent implements OnInit {
 
-  usRegionStatus:boolean = false;
+  usRegionStatus: boolean = false;
 
   formData: FormGroup;
   selectedFile: File;
@@ -43,48 +43,45 @@ export class UploadComponent implements OnInit {
   saveBtnResponse: any;
   chk: boolean = true;
 
-  regionName:any = null;
+  regionName: any = null;
 
-  uploadId:any = null;
+  uploadId: any = null;
+
+  userFormView: boolean = false;
+  uploadFormView: boolean = true;
 
   constructor(private helperservice: HelperService, public fb: FormBuilder) { }
 
-  ngOnInit(): void 
-  {
+  ngOnInit(): void {
+
     this.formData = this.fb.group({
       downloaders: new FormArray([]),
     });
 
     this.userData = sessionStorage.getItem('userData');
+    this.regionName = sessionStorage.getItem('regionType');
     this.saveBtnResponse = false;
-    //$("#saveBtn").hide();
-    $("#userForm").hide();
-    this.default();   
 
   }
 
   default() {
-    //this.helperservice.showSiteLoader();
+    this.helperservice.showSiteLoader();
     this.getUsersByRegion(this.userData);
   }
 
-  loader() 
-  {
-    if(this.usRegionStatus) 
-    {
+  loader() {
+    if (this.usRegionStatus) {
       this.helperservice.hideSiteLoader();
       this.usRegionStatus = false;
     }
   }
 
-  ngAfterViewInit() {    
-    // $("#userForm").hide();
+  ngAfterViewInit() {
 
   }
 
-  
-  getUsersByRegion(id: any) 
-  {
+
+  getUsersByRegion(id: any) {
 
     let api = 'getDownloderByRegion';
     let filterParam: any = { id: parseInt(id) };
@@ -93,10 +90,9 @@ export class UploadComponent implements OnInit {
       if (res.status) {
         this.downloaderList = res.message;
         this.regionName = res.message[0].name;
-        this.addCheckboxesToForm(false);  
+        this.addCheckboxesToForm(false);
         this.usRegionStatus = true;
-        this.loader();     
-        console.log(this.downloaderList);
+        this.loader();
       }
     });
   }
@@ -108,7 +104,7 @@ export class UploadComponent implements OnInit {
   get ordersFormArray() {
     return this.formData.controls.downloaders as FormArray;
   }
-  
+
   onFileSelected(event: any) {
 
     this.filePath = event.target.value;
@@ -116,7 +112,7 @@ export class UploadComponent implements OnInit {
   }
 
   onUpload() {
-    let api = 'fileUpload';    
+    let api = 'fileUpload';
     let name = $("#name").val();
     if (name == '') {
       alert('Please Provide Name');
@@ -132,16 +128,15 @@ export class UploadComponent implements OnInit {
 
   }
 
-  uploadFile(file: any) 
-  {
+  uploadFile(file: any) {
 
     const contentType = file.type;
     const bucket = new S3(
-    {
-      accessKeyId: environment.s3AccessKeyId,
-      secretAccessKey: environment.s3SecretAccessKey,
-      region: environment.s3Region
-    }
+      {
+        accessKeyId: environment.s3AccessKeyId,
+        secretAccessKey: environment.s3SecretAccessKey,
+        region: environment.s3Region
+      }
     );
     const params = {
       Bucket: environment.s3Region,
@@ -152,13 +147,11 @@ export class UploadComponent implements OnInit {
     };
 
     let name = $("#name").val();
-    if (name != '') 
-    {
+    if (name != '') {
 
       this.helperservice.showSiteLoader();
 
-      bucket.upload(params, (err: any, data: any) => 
-      {
+      bucket.upload(params, (err: any, data: any) => {
         if (err) {
           console.log('There was an error uploading your file: ', err);
           $('.msg').css('color', 'red');
@@ -167,31 +160,28 @@ export class UploadComponent implements OnInit {
         }
         //$('.msg').css('color', 'green');
         //$('.msg').text('Successfully uploaded to AWS S3');
-        
+
         this.bResponse.Bucket = data.Bucket;
         this.bResponse.Etag = data.Etag;
         this.bResponse.Key = data.Key;
         this.bResponse.Location = data.Location;
         this.saveBtnResponse = true;
 
-        this.savePathToDb();  
-        
+        this.savePathToDb();
+
         return true;
       });
 
-    } 
-    else 
-    {
+    }
+    else {
       alert('provide name');
     }
   }
 
-
   savePathToDb() {
 
     let name = $("#name").val();
-    if (name != '') 
-    {
+    if (name != '') {
       let api = 'uploadFilesToDb';
       let filterParam: any = {
         user_id: parseInt(this.userData),
@@ -207,29 +197,27 @@ export class UploadComponent implements OnInit {
       this.helperservice.performPostRequest(api, filterParam)?.subscribe((res: any) => {
         if (res.status) {
           this.uploadId = res.id;
-          console.log(res);
           $('.msg').css('color', 'green');
           $('.msg').text('Package created. Now select users you want to send');
           $("#name").val("");
           $("#file").val("");
           this.usRegionStatus = true;
           this.loader();
-          $("#uploadForm").hide();
-          $("#userForm").show();
+          this.uploadFormView = false;
+          this.userFormView = true;
+          this.default();
         }
       });
     }
   }
 
-  submit() 
-  {
+  submit() {
 
     const downloader_id = this.formData.value.downloaders
-    .map((checked: any, i: string | number) => checked ? this.downloaderList[i].id : null)
-    .filter((v: null) => v !== null);
+      .map((checked: any, i: string | number) => checked ? this.downloaderList[i].id : null)
+      .filter((v: null) => v !== null);
 
-    if(downloader_id.length > 0) 
-    {
+    if (downloader_id.length > 0) {
       this.helperservice.showSiteLoader();
       let filterParam = {
         downloaderids: downloader_id,
@@ -239,8 +227,8 @@ export class UploadComponent implements OnInit {
       let api = 'transfer';
       this.helperservice.performPostRequest(api, filterParam)?.subscribe((res: any) => {
         if (res.status) {
-          $("#uploadForm").show();
-          $("#userForm").hide();   
+          this.uploadFormView = true;
+          this.userFormView = false;
           $('.msg').css('color', 'green');
           $('.msg').text('Successfully sent to selected users.');
           this.usRegionStatus = true;

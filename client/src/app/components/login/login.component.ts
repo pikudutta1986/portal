@@ -188,6 +188,7 @@ export class LoginComponent implements OnInit {
 		return new Promise(resolve => {
 			sessionStorage.setItem('userData', result.id);
 			sessionStorage.setItem('userType', result.type);
+			sessionStorage.setItem('regionType', result.region);
 			sessionStorage.setItem('access_token', result.token);
 			resolve(true);
 		});

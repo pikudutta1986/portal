@@ -2,6 +2,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
+              
+              <button mat-raised-button color="primary" class="addNewBtn" (click)="addNewBtnAction()">Add New</button>
               <div class="msg msgStyle"><span></span></div>
                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
@@ -38,7 +40,7 @@
                     <ng-container matColumnDef="symbol">
                       <th mat-header-cell *matHeaderCellDef> Action </th>
                       <td mat-cell *matCellDef="let element">
-                        <button mat-flat-button color="primary" (click)="removeFromReferList(element.id)">
+                        <button mat-flat-button color="warn" (click)="removeFromReferList(element.id)">
                             <!-- <a href="{{element.location}}" target="_blank">Delete</a> -->
                             Delete
                         </button>

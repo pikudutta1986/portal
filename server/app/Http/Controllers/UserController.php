@@ -95,7 +95,6 @@ class UserController extends Controller
         
                 return response($response, 200);
             }
-
            
             $token_data = DB::table('personal_access_tokens')->insertGetId([
                 'tokenable_type' => 'App\Models\User',
@@ -111,11 +110,13 @@ class UserController extends Controller
             $token_details = DB::table('personal_access_tokens')->where('id',$token_data)->first();
             
             // $token = $user->createToken($user->email)->plainTextToken;
+            $region = DB::table('regions')->where('id',$user->regions)->first();
 
             $response = [
                 'id' => $user->id,
                 'type' => $user->userType,
                 'user' => $user->email,
+                'region' => $region->name,
                 'message' => 'logged in',
                 'token' => $token_details->token,
                 'status' => true,

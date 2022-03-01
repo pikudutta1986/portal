@@ -28,7 +28,7 @@ export class ReferListComponent implements OnInit {
   public itemsPerPage: number = 5;
   public dataPage: number = 0;
 
-  constructor(private helperservice: HelperService, public fb: FormBuilder) { }
+  constructor(private helperservice: HelperService, public fb: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
 
@@ -96,8 +96,12 @@ export class ReferListComponent implements OnInit {
         }
         // this.helperservice.hideSiteLoader();
       });
-    }
+    }    
 
+  }
+
+  addNewBtnAction() {
+    this.router.navigate(['/dashboard/refer']);
   }
 
 }
