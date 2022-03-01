@@ -9,6 +9,7 @@ import { HelperService } from '../../../../services/helper.service';
 import * as AWS from 'aws-sdk/global';
 import * as S3 from 'aws-sdk/clients/s3';
 
+import { environment } from './../../../../../environments/environment';
 declare var $: any;
 declare var require: any;
 
@@ -26,7 +27,6 @@ export class UploadComponent implements OnInit {
   formData: FormGroup;
   selectedFile: File;
   filePath: any;
-  FOLDER = '/images/';
   userData: any;
 
   downloaderList: any;
@@ -138,14 +138,14 @@ export class UploadComponent implements OnInit {
     const contentType = file.type;
     const bucket = new S3(
     {
-      accessKeyId: 'AKIA3A3Q7T2RPTYUED6V',
-      secretAccessKey: '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',
-      region: 'ap-south-1'
+      accessKeyId: environment.s3AccessKeyId,
+      secretAccessKey: environment.s3SecretAccessKey,
+      region: environment.s3Region
     }
     );
     const params = {
-      Bucket: 'anindyas3',
-      Key: this.FOLDER + file.name,
+      Bucket: environment.s3Region,
+      Key: file.name,
       Body: file,
       ACL: 'public-read',
       ContentType: contentType
